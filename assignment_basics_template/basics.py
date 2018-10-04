@@ -18,7 +18,7 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     """
 
     # be careful about rounding/ceiling/flooring
-    letter_mean =
+    letter_mean = None
     return letter_mean
 
 
@@ -38,7 +38,7 @@ def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, exampl
     :return:                           counts of values in the corresponding bins, vector <1 x num_bins>
     """
 
-    lr_histogram =
+    lr_histogram = None
     if example_of_optional_input:
         return lr_histogram, bin_edges
     else:
@@ -68,27 +68,27 @@ def matrix_manip(A, B):
     output = {}
 
     # 1. Find the transpose of the matrix A:
-    output['A_transpose'] =
+    output['A_transpose'] = None
 
     # 2. Select the third column of the matrix A:
-    output['A_3rd_col'] =
+    output['A_3rd_col'] = None
 
     # 3. Select last two rows and last three columns of the matrix A and return the matrix in output.A_slice.
-    output['A_slice'] =
+    output['A_slice'] = None
 
     # 4.Find all positions in A greater then 3 and increment them by 1 and add a column of ones to the matrix.
     # Save the result to matrix A_gr_inc:
-    output['A_gr_inc'] =
+    output['A_gr_inc'] = None
 
     # 5. Create matrix C such that Ci,j=∑nk=1A_gr_inci,k⋅A_gr_incTk,j and store it in output.C.
-    output['C'] =
+    output['C'] = None
 
     # 6. Compute ∑nc=1c⋅∑mr=1A_gr_incr,c:
-    output['A_weighted_col_sum'] =
+    output['A_weighted_col_sum'] = None
 
     # 7. Subtract a vector (4,6)T from all columns of matrix B. Save the result to matrix output.D.
-    output['D'] =
+    output['D'] = None
 
     # 8. Select all vectors in the matrix D, which have greater euclidean distance than the average euclidean distance.
-    output['D_select'] =
+    output['D_select'] = None
     return output
