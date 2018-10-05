@@ -1,5 +1,0 @@
-question1 : gen_zero_matrix
-question2 : 'x*' # enclose special characters in parentheses
-question3 : '^' # enclose special characters in parentheses
-question4 : [a,d,e]
-question5 : [b,f]
