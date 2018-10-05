@@ -14,11 +14,10 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     :param alphabet:     list of all characters present in images, e.g. 'abcdefgh'
     :param images:       images of letters, matrix of size (height x width x number of images) (numpy.array)
     :param labels:       image labels, vector of size <number of images>; <label> is index to <Alphabet>
-    :return:             mean of all images of the <letter_char>, uint8 type
+    :return:             mean of all images of the <letter_char>, HxW, rounded to uint8 type
     """
 
-    # be careful about rounding/ceiling/flooring
-    letter_mean = None
+    letter_mean = None # TODO
     return letter_mean
 
 
@@ -38,7 +37,7 @@ def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, exampl
     :return:                           counts of values in the corresponding bins, vector <1 x num_bins>
     """
 
-    lr_histogram = None
+    lr_histogram = None # TODO
     if example_of_optional_input:
         return lr_histogram, bin_edges
     else:
@@ -68,27 +67,27 @@ def matrix_manip(A, B):
     output = {}
 
     # 1. Find the transpose of the matrix A:
-    output['A_transpose'] = None
+    output['A_transpose'] = None # TODO
 
     # 2. Select the third column of the matrix A:
-    output['A_3rd_col'] = None
+    output['A_3rd_col'] = None # TODO
 
     # 3. Select last two rows and last three columns of the matrix A and return the matrix in output.A_slice.
-    output['A_slice'] = None
+    output['A_slice'] = None # TODO
 
     # 4.Find all positions in A greater then 3 and increment them by 1 and add a column of ones to the matrix.
     # Save the result to matrix A_gr_inc:
-    output['A_gr_inc'] = None
+    output['A_gr_inc'] = None # TODO
 
     # 5. Create matrix C such that Ci,j=∑nk=1A_gr_inci,k⋅A_gr_incTk,j and store it in output.C.
-    output['C'] = None
+    output['C'] = None # TODO
 
     # 6. Compute ∑nc=1c⋅∑mr=1A_gr_incr,c:
-    output['A_weighted_col_sum'] = None
+    output['A_weighted_col_sum'] = None # TODO
 
     # 7. Subtract a vector (4,6)T from all columns of matrix B. Save the result to matrix output.D.
-    output['D'] = None
+    output['D'] = None # TODO
 
     # 8. Select all vectors in the matrix D, which have greater euclidean distance than the average euclidean distance.
-    output['D_select'] = None
+    output['D_select'] = None # TODO
     return output
