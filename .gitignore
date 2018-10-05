@@ -3,7 +3,6 @@
 *.pyc
 *.zip
 __pycache__
-.idea
 .venv
 
 # Compiled source #
@@ -28,3 +27,15 @@ __pycache__
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+###PyCharm###
+
+# PyCharm
+# http://www.jetbrains.com/pycharm/webhelp/project.html
+.iml
+.idea
+
+###IPythonNotebook###
+
+# Temporary data
+.ipynb_checkpoints/
