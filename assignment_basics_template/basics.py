@@ -24,6 +24,7 @@ def matrix_manip(A, B):
        output.D_select
 
     """
+    raise NotImplementedError("You have to implement this function.")
 
     output = {}
 
@@ -66,6 +67,7 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     :param labels:       image labels, vector of size <number of images>; <label> is index to <Alphabet>
     :return:             mean of all images of the <letter_char>, HxW, rounded to uint8 type
     """
+    raise NotImplementedError("You have to implement this function.")
 
     letter_mean = None # TODO
     return letter_mean
@@ -87,6 +89,7 @@ def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, return
     :return:                           counts of values in the corresponding bins, vector <1 x num_bins>
     :return:                           (optional if return_bin_edges) vector of bin edges, vector <1 x num_bins + 1>
     """
+    raise NotImplementedError("You have to implement this function.")
 
     lr_histogram = None # TODO
     if return_bin_edges:
