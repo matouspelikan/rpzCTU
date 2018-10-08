@@ -1,17 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from scipy.stats import norm
-import math
 import numpy as np
-import scipy.io
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 matplotlib.rcParams['text.usetex'] = True
 matplotlib.rcParams['text.latex.unicode'] = True
-from scipy.stats import norm
-from PIL import Image
 
 
 def unwrap(data):
