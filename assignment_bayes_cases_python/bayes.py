@@ -31,15 +31,15 @@ def bayes_risk_discrete(discrete_A, discrete_B, W, q):
 
     Compute bayesian risk for a discrete strategy q
 
-    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> vector
+    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> np array
     :param discrete_A['Prior']:     prior probability pK(A)
-    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> vector
+    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> np array
     :param discrete_B['Prior']:     prior probability pK(B)
     :param W:                       cost function matrix
                                     dims: <states x decisions>
                                     (nr. of states and decisions is fixed to 2)
-    :param q:                       strategy - <1 × n> vector, values 1 or 2
-    :return:                        bayesian risk, <1 x 1>
+    :param q:                       strategy - <1 × n> np array, values 0 or 1
+    :return:                        bayesian risk, scalar
     """
 
     raise NotImplementedError("You have to implement this function.")
@@ -53,14 +53,14 @@ def find_strategy_discrete(discrete_A, discrete_B, W):
 
     Find bayesian strategy for 2 discrete distributions.
 
-    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> vector
+    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> np array
     :param discrete_A['Prior']:     prior probability pK(A)
-    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> vector
+    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> np array
     :param discrete_B['Prior']:     prior probability pK(B)
     :param W:                       cost function matrix
                                     dims: <states x decisions>
                                     (nr. of states and decisions is fixed to 2)
-    :return:                        q - optimal strategy <1 x n>
+    :return:                        q - optimal strategy <1 x n>, values 0 or 1
     """
 
     raise NotImplementedError("You have to implement this function.")
@@ -76,7 +76,7 @@ def classify_discrete(imgs, q):
     Classify images using discrete measurement and strategy q.
 
     :param imgs:    test set images, <h x w x n>
-    :param q:       strategy <1 × 21> vector of 0 or 1
+    :param q:       strategy <1 × 21> np array of 0 or 1
     :return:        image labels, <1 x n>
     """
     raise NotImplementedError("You have to implement this function.")
@@ -90,9 +90,9 @@ def classification_error_discrete(images, labels, q):
 
     Compute classification error for a discrete strategy q.
 
-    :param images:      <1 x n> vector
-    :param labels:      <1 x n> vector of values 0 or 1
-    :param q:           <1 × m> vector of 0 or 1
+    :param images:      <h x w x n> np array of images
+    :param labels:      <1 x n> np array of 0 or 1
+    :param q:           <1 × m> np array of 0 or 1
     :return:            error - classification error as a fraction of false samples
                         scalar in range <0, 1>
     """
@@ -211,11 +211,11 @@ def visualize_discrete(discrete_A, discrete_B, q):
 
     Visualize a strategy for 2 discrete distributions.
 
-    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> vector
+    :param discrete_A['Prob']:      pXk(x|A) given as a <1 × n> np array
     :param discrete_A['Prior']:     prior probability pK(A)
-    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> vector
+    :param discrete_B['Prob']:      pXk(x|B) given as a <1 × n> np array
     :param discrete_B['Prior']:     prior probability pK(B)
-    :param q:                       strategy - <1 × n> vector, values 1 or 2
+    :param q:                       strategy - <1 × n> np array, values 1 or 2
     :return:
     """
 
@@ -257,7 +257,7 @@ def compute_measurement_lr_discrete(imgs):
     Calculates difference between left and right half of image(s).
 
     :param imgs:    set of images, <h x w x n> or <h x w x 3 x n> (color images)
-    :return:        vector of values in range <-10, 10>,
+    :return:        np array of values in range <-10, 10>,
                     shape <1 x n>
     """
     mu = -563.9
@@ -278,5 +278,3 @@ def compute_measurement_lr_discrete(imgs):
     x[x < -10] = -10
 
     return x
-
-
