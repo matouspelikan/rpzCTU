@@ -38,7 +38,7 @@ def bayes_risk_discrete(discrete_A, discrete_B, W, q):
     :param W:                       cost function matrix
                                     dims: <states x decisions>
                                     (nr. of states and decisions is fixed to 2)
-    :param q:                       strategy - <1 × n> vector, values 1 or 2
+    :param q:                       strategy - <1 × n> vector, values 0 or 1
     :return:                        bayesian risk, <1 x 1>
     """
 
