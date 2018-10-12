@@ -4,45 +4,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def compute_letter_mean(letter_char, alphabet, images, labels):
-    """
-    img = compute_letter_mean(letter_char, alphabet, images, labels)
-
-    Compute mean image for a letter.
-
-    :param letter_char:  character, e.g. 'm'
-    :param alphabet:     list of all characters present in images, e.g. 'abcdefgh'
-    :param images:       images of letters, matrix of size (height x width x number of images) (numpy.array)
-    :param labels:       image labels, vector of size <number of images>; <label> is index to <Alphabet>
-    :return:             mean of all images of the <letter_char>, HxW, rounded to uint8 type
-    """
-
-    letter_mean = None # TODO
-    return letter_mean
-
-
-def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, example_of_optional_input=False):
-    """
-    lr_histogram = compute_lr_histogram(letter_char, alphabet, images, labels, num_bins)
-
-    Calculates feature histogram.
-
-    :param letter_char:                is a character representing the letter whose feature histogram
-                                       we want to compute, e.g. 'C'
-    :param alphabet:                   string of characters
-    :param images:                     images in 3d matrix of shape <h x w x n>
-    :param labels:                     labels of images, indices to Alphabet list, <1 x n>
-    :param num_bins:                   number of histogram bins
-    :param example_of_optional_input:
-    :return:                           counts of values in the corresponding bins, vector <1 x num_bins>
-    """
-
-    lr_histogram = None # TODO
-    if example_of_optional_input:
-        return lr_histogram, bin_edges
-    else:
-        return lr_histogram
-
 
 def matrix_manip(A, B):
     """
@@ -63,6 +24,7 @@ def matrix_manip(A, B):
        output.D_select
 
     """
+    raise NotImplementedError("You have to implement this function.")
 
     output = {}
 
@@ -91,3 +53,46 @@ def matrix_manip(A, B):
     # 8. Select all vectors in the matrix D, which have greater euclidean distance than the average euclidean distance.
     output['D_select'] = None # TODO
     return output
+
+
+def compute_letter_mean(letter_char, alphabet, images, labels):
+    """
+    img = compute_letter_mean(letter_char, alphabet, images, labels)
+
+    Compute mean image for a letter.
+
+    :param letter_char:  character, e.g. 'm'
+    :param alphabet:     list of all characters present in images, e.g. 'abcdefgh'
+    :param images:       images of letters, matrix of size (height x width x number of images) (numpy.array)
+    :param labels:       image labels, vector of size <number of images>; <label> is index to <Alphabet>
+    :return:             mean of all images of the <letter_char>, HxW, rounded and converted to uint8 type
+    """
+    raise NotImplementedError("You have to implement this function.")
+
+    letter_mean = None # TODO
+    return letter_mean
+
+
+def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, return_bin_edges=False):
+    """
+    lr_histogram = compute_lr_histogram(letter_char, alphabet, images, labels, num_bins)
+
+    Calculates feature histogram.
+
+    :param letter_char:                is a character representing the letter whose feature histogram
+                                       we want to compute, e.g. 'C'
+    :param alphabet:                   string of characters
+    :param images:                     images in 3d matrix of shape <h x w x n>
+    :param labels:                     labels of images, indices to Alphabet list, <1 x n>
+    :param num_bins:                   number of histogram bins
+    :param return_bin_edges:           toggle additional output
+    :return:                           counts of values in the corresponding bins, vector <1 x num_bins>
+    :return:                           (optional if return_bin_edges) vector of bin edges, vector <1 x num_bins + 1>
+    """
+    raise NotImplementedError("You have to implement this function.")
+
+    lr_histogram = None # TODO
+    if return_bin_edges:
+        return lr_histogram, bin_edges
+    else:
+        return lr_histogram
