@@ -65,7 +65,7 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     :param alphabet:     list of all characters present in images, e.g. 'abcdefgh'
     :param images:       images of letters, matrix of size (height x width x number of images) (numpy.array)
     :param labels:       image labels, vector of size <number of images>; <label> is index to <Alphabet>
-    :return:             mean of all images of the <letter_char>, HxW, rounded to uint8 type
+    :return:             mean of all images of the <letter_char>, HxW, rounded and converted to uint8 type
     """
     raise NotImplementedError("You have to implement this function.")
 
