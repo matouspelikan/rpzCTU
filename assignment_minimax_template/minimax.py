@@ -9,17 +9,6 @@ import scipy.optimize as opt
 import copy
 
 
-def unwrap(data):
-    try:
-        while (len(data) == 1) and (len(data.shape) > 0):
-            data = data[0]
-    except TypeError:
-        pass
-    except:
-        pass
-    return data
-
-
 def risk_fix_q_discrete(D1, D2, D1_priors, q):
     """
     risks = risk_fix_q_discrete(D1, D2, D1_priors, q)
