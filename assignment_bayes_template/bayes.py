@@ -90,7 +90,7 @@ def classification_error_discrete(images, labels, q):
 
     Compute classification error for a discrete strategy q.
 
-    :param images:      <1 x n> np array
+    :param images:      <h x w x n> np array
     :param labels:      <1 x n> np array of values 0 or 1
     :param q:           <1 × m> np array of 0 or 1
     :return:            error - classification error as a fraction of false samples
@@ -278,5 +278,3 @@ def compute_measurement_lr_discrete(imgs):
     x[x < -10] = -10
 
     return x
-
-
