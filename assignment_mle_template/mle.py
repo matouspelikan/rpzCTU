@@ -68,6 +68,8 @@ def loglikelihood_sigma(x, D, sigmas):
     :return:        L - <1 x m> vector of log likelihoods
                     maximizer_sigma - sigma for the maximal log likelihood
                     max_L - maximal log likelihood
+
+    Hint: use opt.fminbound()
     """
 
     # try to implement this without loops
