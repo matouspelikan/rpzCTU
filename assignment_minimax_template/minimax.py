@@ -59,7 +59,7 @@ def minmax_strategy_discrete(D1, D2):
 
     :param D1:  discrete distributions, pXk(x|D1) given as a <1 × n> np array
     :param D2:  discrete distributions, pXk(x|D2) given as a <1 × n> np array
-    :return:    q - strategy, <1x21> np array of 0 and 1 (see find_strategy_discrete)
+    :return:    q - strategy, <1 x n> np array of 0 and 1 (see find_strategy_discrete)
                 worst_risk - worst risk of the minimax strategy q
     """
     W = np.array([[0., 1.], [1., 0.]])
