@@ -10,9 +10,9 @@ def logistic_loss(X, y, w):
 
     Evaluates the logistic loss function.
 
-    :param X:  d-dimensional observations, nd array <d x number_of_observations>
-    :param y:  labels of the observations, nd array <1 x number_of_observations>
-    :param w:  weights, nd array <d x 1>
+    :param X:  d-dimensional observations, np array <d x number_of_observations>
+    :param y:  labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param w:  weights, np array <d x 1>
     :return:   calculated loss (scalar)
     """
     raise NotImplementedError("You have to implement this function.")
@@ -25,10 +25,10 @@ def logistic_loss_gradient(X, y, w):
 
     Calculates gradient of the logistic loss function.
 
-    :param X:  d-dimensional observations, nd array <d x number_of_observations>
-    :param y:  labels of the observations, nd array <1 x number_of_observations>
-    :param w:  weights, nd array <d x 1>
-    :return:   g - resulting gradient vector, nd array <d x 1>
+    :param X:  d-dimensional observations, np array <d x number_of_observations>
+    :param y:  labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param w:  weights, np array <d x 1>
+    :return:   g - resulting gradient vector, np array <d x 1>
     """
     raise NotImplementedError("You have to implement this function.")
     return g
@@ -40,13 +40,13 @@ def logistic_loss_gradient_descent(X, y, w_init, epsilon):
 
     Performs gradient descent optimization of the logistic loss function.
 
-    :param X:       d-dimensional observations, nd array <d x number_of_observations>
-    :param y:       labels of the observations, nd array <1 x number_of_observations>
-    :param w_init:  initial weights, nd array <d x 1>
+    :param X:       d-dimensional observations, np array <d x number_of_observations>
+    :param y:       labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param w_init:  initial weights, np array <d x 1>
     :param epsilon: parameter of termination condition: np.norm(w_new - w_prev) <= epsilon
-    :return:        w - resulting weights, nd array <d x 1>
-                    wt - progress of weights, nd array <d x number_of_accepted_candidates>
-                    Et - progress of logistic loss, nd array <1 x number_of_accepted_candidates>
+    :return:        w - resulting weights, np array <d x 1>
+                    wt - progress of weights, np array <d x number_of_accepted_candidates>
+                    Et - progress of logistic loss, np array <1 x number_of_accepted_candidates>
     """
     raise NotImplementedError("You have to implement this function.")
     return w, wt, Et
@@ -58,9 +58,9 @@ def classify_images(X, w):
 
     Classification by logistic regression.
 
-    :param X: d-dimensional observations, nd array <d x number_of_observations>
-    :param w: weights, nd array <d x 1>
-    :return:  y - labels of the observations, nd array <1 x number_of_observations>
+    :param X: d-dimensional observations, np array <d x number_of_observations>
+    :param w: weights, np array <d x 1>
+    :return:  y - labels of the observations, np array <1 x number_of_observations>, values -1, +1
     """
     raise NotImplementedError("You have to implement this function.")
     return y
@@ -91,12 +91,12 @@ def plot_gradient_descent(X, y, loss_function, w, wt, Et):
 
     Plots the progress of the gradient descent.
 
-    :param X:               d-dimensional observations, nd array <d x number_of_observations>
-    :param y:               labels of the observations, nd array <1 x number_of_observations>
-    :param loss_function:   pointer to a logistic loss function
-    :param w:               weights, nd array <d x 1>
-    :param wt:              progress of weights, nd array <d x number_of_accepted_candidates>
-    :param Et:              progress of logistic loss, nd array <1 x number_of_accepted_candidates>
+    :param X:               d-dimensional observations, np array <d x number_of_observations>
+    :param y:               labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param loss_function:   logistic loss function
+    :param w:               weights, np array <d x 1>
+    :param wt:              progress of weights, np array <d x number_of_accepted_candidates>
+    :param Et:              progress of logistic loss, np array <1 x number_of_accepted_candidates>
     :return:
     """
 
@@ -158,9 +158,9 @@ def plot_aposteriori(X, y, w):
     """
     plot_aposteriori(X, y, w)
 
-    :param X:               d-dimensional observations, nd array <d x number_of_observations>
-    :param y:               labels of the observations, nd array <1 x number_of_observations>
-    :param w:               weights, nd array <d x 1>
+    :param X:               d-dimensional observations, np array <d x number_of_observations>
+    :param y:               labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param w:               weights, np array <d x 1>
     """
     assert (len(X.shape) == 2)
     assert (len(y.shape) == 2) and (y.shape[0] == 1)
