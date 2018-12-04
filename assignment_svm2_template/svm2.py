@@ -64,7 +64,7 @@ def compute_kernel_test_error(itrn, itst, X, y, C, options):
     :param C:        scalar regularization constant C
     :param options:  dict with options for my_kernel_svm and classif_kernel_svm
 
-    :return:         mean test error
+    :return:         mean test error - mean (over the crossval folds) of number of errors
     """
     raise NotImplementedError("You have to implement this function.")
 
