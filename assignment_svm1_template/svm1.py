@@ -91,7 +91,7 @@ def compute_test_error(itrn, itst, X, y, C):
     :param y:    <m x > np.array - labels 1, -1
     :param C:    scalar regularization constant C
 
-    :return:     mean test error
+    :return:     mean test error - mean (over the crossval folds) of number of errors
     """
     raise NotImplementedError("You have to implement this function.")
 
