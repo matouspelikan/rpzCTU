@@ -14,6 +14,8 @@ def adaboost(X, y, num_steps):
     :return:            strong_classifier - dict with fields:
                             strong_classifier['wc'] - list of weak classifiers (see docstring of find_best_weak)
                             strong_classifier['alpha'] - list of weak classifier coefficients
+                        wc_errors - < n_wc x > np.array of error of the best weak classifier in each iteration
+                        upper_bound - < n_wc x > np.array of upper bound on the training error in each iteration
 
     """
     raise NotImplementedError("You have to implement this function.")
