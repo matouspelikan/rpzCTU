@@ -14,14 +14,14 @@ def matrix_manip(A, B):
     :param A: matrix, arbitrary shape
     :param B: matrix, <2 x n>
     :return:
-       output.A_transpose
-       output.A_3rd_col
-       output.A_slice
-       output.A_gr_inc
-       output.C
-       output.A_weighted_col_sum
-       output.D
-       output.D_select
+       output['A_transpose']
+       output['A_3rd_col']
+       output['A_slice']
+       output['A_gr_inc']
+       output['C']
+       output['A_weighted_col_sum']
+       output['D']
+       output['D_select']
 
     """
 
