@@ -24,3 +24,5 @@ git pull
 git checkout solutions
 git merge master
 ```
+
+**Keep in mind that the assignments and the assignment templates will be updated during the semester.  Always pull the current template version before starting to work on an assignment!**
