@@ -11,8 +11,8 @@ def matrix_manip(A, B):
 
     Perform example matrix manipulations.
 
-    :param A: matrix, arbitrary shape
-    :param B: matrix, <2 x n>
+    :param A: np.array (k, l), l>3
+    :param B: np.array (2, n)
     :return:
        output['A_transpose']
        output['A_3rd_col']
@@ -37,10 +37,10 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     Compute mean image for a letter.
 
     :param letter_char:  character, e.g. 'm'
-    :param alphabet:     np.array of all characters present in images <n_letters x >
-    :param images:       images of letters, np.array of size <height x width x number of images>
-    :param labels:       image labels, np.array of size <number of images>; <label> is index to <Alphabet>
-    :return:             mean of all images of the <letter_char>, uint8 type
+    :param alphabet:     np.array of all characters present in images (n_letters, )
+    :param images:       images of letters, np.array of size (H, W, n_images)
+    :param labels:       image labels, np.array of size (n_images, ) (index into alphabet array)
+    :return:             mean of all images of the letter_char, np.uint8 dtype (round, then convert)
     """
     raise NotImplementedError("You have to implement this function.")
     letter_mean = None
@@ -55,13 +55,13 @@ def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, return
 
     :param letter_char:                is a character representing the letter whose feature histogram
                                        we want to compute, e.g. 'C'
-    :param alphabet:                   np.array of all characters present in images <n_letters x >
-    :param images:                     images in 3d matrix of shape <h x w x n>
-    :param labels:                     labels of images, indices to Alphabet list, <n x >
+    :param alphabet:                   np.array of all characters present in images (n_letters, )
+    :param images:                     images of letters, np.array of shape (h, w, n_images)
+    :param labels:                     image_labels, np.array of size (n_images, ) (indexes into alphabet array)
     :param num_bins:                   number of histogram bins
     :param return_bin_edges:
-    :return:                           counts of values in the corresponding bins, np.array <num_bins, >,
-                                       bin edges, if return_bin_edges is True, np.array <num_bins+1, >
+    :return:                           counts of values in the corresponding bins, np.array (num_bins, ),
+                                       (only if return_bin_edges is True) histogram bin edges, np.array (num_bins+1, )
     """
 
     raise NotImplementedError("You have to implement this function.")
@@ -92,7 +92,7 @@ def montage(images, colormap='gray'):
     """
     Show images in grid.
 
-    :param images:  np.array <h x w x n>
+    :param images:  np.array (h x w x n_images)
     """
     h, w, count = np.shape(images)
     h_sq = np.int(np.ceil(np.sqrt(count)))
