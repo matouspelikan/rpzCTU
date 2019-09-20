@@ -96,7 +96,8 @@ def find_strategy_2normal(distribution_A, distribution_B):
     :return q:              strategy
                                q['t1'], q['t2'] - descision thresholds
                                q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-
+                               If there is only one threshold, q['t1'] should be equal to q['t2'] and the middle decision should be 0
+                               If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same
     """
     raise NotImplementedError("You have to implement this function.")
     q = None
