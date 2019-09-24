@@ -11,17 +11,17 @@ def matrix_manip(A, B):
 
     Perform example matrix manipulations.
 
-    :param A: np.array (k, l), l>3
+    :param A: np.array (k, l), l >= 3
     :param B: np.array (2, n)
     :return:
-       output['A_transpose']
-       output['A_3rd_col']
-       output['A_slice']
-       output['A_gr_inc']
-       output['C']
-       output['A_weighted_col_sum']
-       output['D']
-       output['D_select']
+       output['A_transpose'] (l, k)
+       output['A_3rd_col'] (k, 1)
+       output['A_slice'] (2, 3)
+       output['A_gr_inc'] (k, l+1)
+       output['C'] (k, k)
+       output['A_weighted_col_sum'] float
+       output['D'] (2, n)
+       output['D_select'] (2, n')
 
     """
 
