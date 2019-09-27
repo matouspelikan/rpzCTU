@@ -14,14 +14,14 @@ def matrix_manip(A, B):
     :param A: np.array (k, l), l >= 3
     :param B: np.array (2, n)
     :return:
-       output['A_transpose'] (l, k)
-       output['A_3rd_col'] (k, 1)
-       output['A_slice'] (2, 3)
-       output['A_gr_inc'] (k, l+1)
-       output['C'] (k, k)
-       output['A_weighted_col_sum'] float
-       output['D'] (2, n)
-       output['D_select'] (2, n')
+       output['A_transpose'] (l, k), same dtype as A
+       output['A_3rd_col'] (k, 1), same dtype as A
+       output['A_slice'] (2, 3), same dtype as A
+       output['A_gr_inc'] (k, l+1), same dtype as A
+       output['C'] (k, k), same dtype as A
+       output['A_weighted_col_sum'] python float
+       output['D'] (2, n), same dtype as B
+       output['D_select'] (2, n'), same dtype as B
 
     """
 
