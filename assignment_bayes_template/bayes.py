@@ -25,7 +25,7 @@ def bayes_risk_discrete(discrete_A, discrete_B, W, q):
     :param W:                       cost function np.array (states, decisions)
                                     (nr. of states and decisions is fixed to 2)
     :param q:                       strategy - (n, ) np.array, values 0 or 1
-    :return:                        bayesian risk - scalar
+    :return:                        bayesian risk - python float
     """
     raise NotImplementedError("You have to implement this function.")
     R = None
@@ -44,7 +44,7 @@ def find_strategy_discrete(discrete_A, discrete_B, W):
     :param discrete_B['Prior']:     prior probability pK(B)
     :param W:                       cost function np.array (states, decisions)
                                     (nr. of states and decisions is fixed to 2)
-    :return:                        q - optimal strategy (n, ) np.array
+    :return:                        q - optimal strategy (n, ) np.array, values 0 or 1
     """
     raise NotImplementedError("You have to implement this function.")
     q = None
@@ -57,7 +57,7 @@ def classify_discrete(imgs, q):
 
     Classify images using discrete measurement and strategy q.
 
-    :param imgs:    test set images, (h, w, n) np.array
+    :param imgs:    test set images, (h, w, n) uint8 np.array
     :param q:       strategy (21, ) np.array of 0 or 1
     :return:        image labels, (n, ) np.array of 0 or 1
     """
@@ -73,11 +73,11 @@ def classification_error_discrete(images, labels, q):
 
     Compute classification error for a discrete strategy q.
 
-    :param images:      images, (h, w, n) np.array
-    :param labels:      (n, ) np.array of values 0 or 1
-    :param q:           (m, ) np.array of 0 or 1
+    :param images:      images, (h, w, n) np.uint8 np.array
+    :param labels:      (n, ) np.array of values 0 or 1 - ground truth labels
+    :param q:           (m, ) np.array of 0 or 1 - classification strategy
     :return:            error - classification error as a fraction of false samples
-                        scalar in range <0, 1>
+                        python float in range <0, 1>
     """
     raise NotImplementedError("You have to implement this function.")
     error = None
@@ -91,13 +91,14 @@ def find_strategy_2normal(distribution_A, distribution_B):
     Find optimal bayesian strategy for 2 normal distributions and zero-one loss function.
 
     :param distribution_A:  parameters of the normal dist.
-                            distribution_A['Mean'], distribution_A['Sigma'], distribution_A['Prior']
+                            distribution_A['Mean'], distribution_A['Sigma'], distribution_A['Prior'] - python floats
     :param distribution_B:  the same as distribution_A
-    :return q:              strategy
-                               q['t1'], q['t2'] - descision thresholds
+
+    :return q:              strategy dict
+                               q['t1'], q['t2'] - decision thresholds - python floats
                                q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
                                If there is only one threshold, q['t1'] should be equal to q['t2'] and the middle decision should be 0
-                               If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same
+                               If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same (0 preferred)
     """
     raise NotImplementedError("You have to implement this function.")
     q = None
@@ -112,12 +113,12 @@ def bayes_risk_2normal(distribution_A, distribution_B, q):
     Compute bayesian risk of a strategy q for 2 normal distributions and zero-one loss function.
 
     :param distribution_A:  parameters of the normal dist.
-                            distribution_A['Mean'], distribution_A['Sigma'], distribution_A['Prior']
+                            distribution_A['Mean'], distribution_A['Sigma'], distribution_A['Prior'] python floats
     :param distribution_B:  the same as distribution_A
     :param q:               strategy
-                               q['t1'], q['t2'] - float descision thresholds
-                               q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:    R - bayesian risk, float
+                               q['t1'], q['t2'] - float decision thresholds (python floats)
+                               q['decision'] - (3, ) np.int32 np.array 0/1 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
+    :return:    R - bayesian risk, python float
     """
     raise NotImplementedError("You have to implement this function.")
     R = None
@@ -132,7 +133,7 @@ def classify_2normal(imgs, q):
 
     :param imgs:    test set images, np.array (h, w, n)
     :param q:       strategy
-                    q['t1'] q['t2'] - float descision thresholds
+                    q['t1'] q['t2'] - float decision thresholds
                     q['decision'] - (3, ) int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
     :return:        label - image labels, (n, ) int32
     """
@@ -150,9 +151,9 @@ def classification_error_2normal(images, labels, q):
     :param images:  test set images, (h, w, n)
     :param labels:  test set labels (n, )
     :param q:       strategy
-                    q['t1'] q['t2'] - float descision thresholds
+                    q['t1'] q['t2'] - float decision thresholds
                     q['decision'] - (3, ) np.int32 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:        float classification error in range <0, 1>
+    :return:        python float classification error in range <0, 1>. Fraction of incorrect classifications.
     """
     raise NotImplementedError("You have to implement this function.")
     error = None
