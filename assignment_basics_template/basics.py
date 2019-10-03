@@ -40,7 +40,7 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     :param alphabet:     np.array of all characters present in images (n_letters, )
     :param images:       images of letters, np.array of size (H, W, n_images)
     :param labels:       image labels, np.array of size (n_images, ) (index into alphabet array)
-    :return:             mean of all images of the letter_char, np.uint8 dtype (round, then convert)
+    :return:             mean of all images of the letter_char, (H, W) np.uint8 dtype (round, then convert)
     """
     raise NotImplementedError("You have to implement this function.")
     letter_mean = None
