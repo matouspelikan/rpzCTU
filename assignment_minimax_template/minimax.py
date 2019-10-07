@@ -3,140 +3,118 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import norm
+from PIL import Image
 
-from bayes import *
 import scipy.optimize as opt
 import copy
+# importing bayes doesn't work in BRUTE :(, please copy the functions into this file
 
 
-def risk_fix_q_discrete(D1, D2, D1_priors, q):
+def risk_fix_q_discrete(discrete_A, discrete_B, discrete_A_priors, q):
     """
-    risks = risk_fix_q_discrete(D1, D2, D1_priors, q)
+    Computes risk(s) for varying priors and 0-1 loss.
 
-    Computes risk(s) for varying prior.
-
-    :param D1:          discrete distributions, priors not needed, pXk(x|D1) given as a <1 × n> np array
-    :param D2:          discrete distributions, priors not needed, pXk(x|D2) given as a <1 × n> np array
-    :param D1_priors:   D1_priors <1 x n> np array of D1 priors
-    :param q:           strategy - <1 × n> np array, values 0 or 1
-    :return:            <1xn> np array of bayesian risk of the strategy q
-                        with 0-1 cost function and varying priors D1_priors
+    :param discrete_A['Prob']:      pXk(x|A) given as a (n, ) np.array
+    :param discrete_B['Prob']:      pXk(x|B) given as a (n, ) np.array
+    :param discrete_A_priors:       discrete_A_priors (m, ) np.array
+    :param q:                       strategy - (n, ) np.array, values 0 or 1 (see find_strategy_discrete)
+    :return risks:                  bayesian risk of the strategy q (m, ) np.array
     """
-
-    W = np.array([[0, 1], [1, 0]])
-
     raise NotImplementedError("You have to implement this function.")
     risks = None
     return risks
 
 
-def worst_risk_discrete(D1, D2, D1_priors):
+def worst_risk_discrete(discrete_A, discrete_B, discrete_A_priors):
     """
-    worst_risks = worst_risk_discrete(D1, D2, D1_priors)
+    For each given prior probability value of the first class, the function finds the optimal bayesian strategy and computes its worst possible risk in case it is run with data from different a priori probability. It assumes the 0-1 loss.
 
-    Compute worst possible risks of a bayesian strategies.
+    :param discrete_A['Prob']:      pXk(x|A) given as a (n, ) np.array
+    :param discrete_B['Prob']:      pXk(x|B) given as a (n, ) np.array
+    :param discrete_A_priors:       discrete_A_priors (m, ) np.array
+    :return worst_risks:            worst risk of bayesian strategies (m, ) np.array
+                                    for discrete_A, discrete_B with different discrete_A_priors
 
-    :param D1:          discrete distributions, pXk(x|D1) given as a <1 × n> np array
-    :param D2:          discrete distributions, pXk(x|D2) given as a <1 × n> np array
-    :param D1_priors:   D1_priors <1 x n> np array of D1 priors
-    :return:            <1 x n> worst risk of bayesian strategies
-                        for D1, D2 with different priors D1_priors
-
-    Hint: for all D1_priors calculate bayesian strategy and corresponding maximal risk.
+    Hint: for all discrete_A_priors calculate bayesian strategy and corresponding maximal possible risk if the real prior would be different.
     """
-    W = np.array([[0., 1.], [1., 0.]])
-    worst_risks = np.zeros_like(D1_priors)
     raise NotImplementedError("You have to implement this function.")
-
+    worst_risks = None
     return worst_risks
 
 
-def minmax_strategy_discrete(D1, D2):
+def minmax_strategy_discrete(discrete_A, discrete_B):
     """
-    q, worst_risk = minmax_strategy_discrete(D1, D2)
+    Find minmax strategy with 0-1 loss.
 
-    Find minmax strategy.
-
-    :param D1:  discrete distributions, pXk(x|D1) given as a <1 × n> np array
-    :param D2:  discrete distributions, pXk(x|D2) given as a <1 × n> np array
-    :return:    q - strategy, <1 x n> np array of 0 and 1 (see find_strategy_discrete)
-                worst_risk - worst risk of the minimax strategy q
+    :param discrete_A['Prob']:      pXk(x|A) given as a (n, ) np.array
+    :param discrete_B['Prob']:      pXk(x|B) given as a (n, ) np.array
+    :return q:                      strategy - (n, ) np.array, values 0 or 1 (see find_strategy_discrete)
+    :return worst_risk              worst risk of the minimax strategy q, python float
     """
-    W = np.array([[0., 1.], [1., 0.]])
     raise NotImplementedError("You have to implement this function.")
-    q = None
-    worst_risk = None
-
+    q, worst_risk = None, None
     return q, worst_risk
 
 
-def risk_fix_q_cont(D1, D2, D1_priors, q):
+def risk_fix_q_cont(distribution_A, distribution_B, distribution_A_priors, q):
     """
-    function risks = risk_fix_q_cont(D1, D2, D1_priors, q)
+    Computes bayesian risks for fixed strategy and various priors.
 
-    Computes risk(s) for varying prior.
-
-    :param D1:          parameters of the normal dist.
-                        D1['Mean'], D1['Sigma']
-    :param D2:          parameters of the normal dist.
-                        D2['Mean'], D2['Sigma']
-    :param D1_priors:   <1xn> np array of D1 priors
-    :param q:           strategy
-                        q['t1'] q['t2'] - two descision thresholds
-                        q['decision'] - 3 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf) shape <1 x 3>
-    :return:            <1xn> np array of bayesian risk of the strategy q with
-                        varying prior D1_priors
+    :param distribution_A:          parameters of the normal dist.
+                                    distribution_A['Mean'], distribution_A['Sigma'] - python floats
+    :param distribution_B:          the same as distribution_A
+    :param distribution_A_priors:   priors (n, ) np.array
+    :return q:                      strategy dict - see bayes.find_strategy_2normal
+                                       q['t1'], q['t2'] - decision thresholds - python floats
+                                       q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
+    :return risks:                  bayesian risk of the strategy q with varying priors (n, ) np.array
     """
-    risks = np.zeros_like(D1_priors)
     raise NotImplementedError("You have to implement this function.")
-
+    risks = None
     return risks
 
 
-def worst_risk_cont(D1, D2, D1_priors):
+def worst_risk_cont(distribution_A, distribution_B, distribution_A_priors):
     """
-    worst_risks = worst_risk_cont(D1, D2, D1_priors)
+    For each given prior probability value of the first class, the function finds the optimal bayesian strategy and computes its worst possible risk in case it is run with data from different a priori probability. It assumes the 0-1 loss.
 
-    Compute worst possible risks of a bayesian strategies.
+    :param distribution_A:          parameters of the normal dist.
+                                    distribution_A['Mean'], distribution_A['Sigma'] - python floats
+    :param distribution_B:          the same as distribution_A
+    :param distribution_A_priors:   priors (n, ) np.array
+    :return worst_risk:             worst bayesian risk with varying priors (n, ) np.array
+                                    for distribution_A, distribution_B with different priors
 
-    :param D1:          parameters of the normal dist.
-                        D1['Mean'], D1['Sigma']
-    :param D2:          parameters of the normal dist.
-                        D2['Mean'], D2['Sigma']
-    :param D1_priors:   <1xn> np array of D1 priors
-    :return:            <1 x n> worst risk of bayesian strategies
-                        for D1, D2 with different priors D1_priors
-
-    Hint: for all D1_priors calculate bayesian strategy and
-    corresponding maximal risk.
+    Hint: for all distribution_A_priors calculate bayesian strategy and corresponding maximal risk.
     """
-    worst_risks = np.zeros_like(D1_priors)
     raise NotImplementedError("You have to implement this function.")
-
+    worst_risks = None
     return worst_risks
 
 
-def minmax_strategy_cont(D1, D2):
+def minmax_strategy_cont(distribution_A, distribution_B):
     """
-    q, risk = minmax_strategy_cont(D1, D2)
+    q, worst_risk = minmax_strategy_cont(distribution_A, distribution_B)
 
     Find minmax strategy.
 
-    :param D1:          parameters of the normal dist.
-                        D1['Mean'], D1['Sigma']
-    :param D2:          parameters of the normal dist.
-                        D2['Mean'], D2['Sigma']
-    :return:            q - strategy
-                        q['t1'] q['t2'] - two descision thresholds
-                        q['decision'] - 3 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf) shape <1 x 3>
-                        worst_risk - worst risk of the minimax strategy q
+    :param distribution_A:  parameters of the normal dist.
+                            distribution_A['Mean'], distribution_A['Sigma'] - python floats
+    :param distribution_B:  the same as distribution_A
+    :return q:              strategy dict - see bayes.find_strategy_2normal
+                               q['t1'], q['t2'] - decision thresholds - python floats
+                               q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
+    :return worst_risk      worst risk of the minimax strategy q - python float
     """
-
     raise NotImplementedError("You have to implement this function.")
-    q = None
-    worst_risk = None
-
+    q, worst_risk = None, None
     return q, worst_risk
+
+
+###########################################################################################
+#  Put functions from previous labs here. (Sorry, we know imports would be much better)   #
+###########################################################################################
 
 
 ################################################################################
@@ -144,6 +122,60 @@ def minmax_strategy_cont(D1, D2):
 #####             Below this line are already prepared methods             #####
 #####                                                                      #####
 ################################################################################
+
+
+def compute_measurement_lr_cont(imgs):
+    """
+    x = compute_measurement_lr_cont(imgs)
+
+    Compute measurement on images, subtract sum of right half from sum of
+    left half.
+
+    :param imgs:    set of images, (h, w, n)
+    :return x:      measurements, (n, )
+    """
+    assert len(imgs.shape) == 3
+
+    width = imgs.shape[1]
+    sum_rows = np.sum(imgs, dtype=np.float64, axis=0)
+
+    x = np.sum(sum_rows[0:int(width / 2),:], axis=0) - np.sum(sum_rows[int(width / 2):,:], axis=0)
+
+    assert x.shape == (imgs.shape[2], )
+    return x
+
+
+def compute_measurement_lr_discrete(imgs):
+    """
+    x = compute_measurement_lr_discrete(imgs)
+
+    Calculates difference between left and right half of image(s).
+
+    :param imgs:    set of images, (h, w, n) (or for color images (h, w, 3, n)) np.array
+    :return x:      measurements, (n, ) np.array of values in range <-10, 10>,
+    """
+    assert len(imgs.shape) in (3, 4)
+    assert (imgs.shape[2] == 3 or len(imgs.shape) == 3)
+
+    mu = -563.9
+    sigma = 2001.6
+
+    if len(imgs.shape) == 3:
+        imgs = np.expand_dims(imgs, axis=2)
+
+    imgs = imgs.astype(np.int32)
+    height, width, channels, count = imgs.shape
+
+    x_raw = np.sum(np.sum(np.sum(imgs[:, 0:int(width / 2), :, :], axis=0), axis=0), axis=0) - \
+            np.sum(np.sum(np.sum(imgs[:, int(width / 2):, :, :], axis=0), axis=0), axis=0)
+    x_raw = np.squeeze(x_raw)
+
+    x = np.atleast_1d(np.round((x_raw - mu) / (2 * sigma) * 10))
+    x[x > 10] = 10
+    x[x < -10] = -10
+
+    assert x.shape == (imgs.shape[-1], )
+    return x
 
 
 def create_test_set(images_test, letters):
@@ -155,21 +187,21 @@ def create_test_set(images_test, letters):
     :param images_test: dict of all test images
                         images_test.A, images_test.B, ...
     :param letters:     string with letters, e.g. 'CN'
-    :return:            images - shape h x w x n
-                        labels - shape 1 x n
+    :return images:     images - np.array (h, w, n)
+    :return labels:     labels for images np.array (n,)
     """
 
     images = None
     labels = None
     for idx in range(len(letters)):
         imgs = images_test[letters[idx]]
-        cur_labels = idx * np.ones([1, imgs.shape[2]], np.int32)
+        cur_labels = idx * np.ones([imgs.shape[2]], np.int32)
         if images is None:
             images = copy.copy(imgs)
             labels = cur_labels
         else:
             images = np.concatenate([images, imgs], axis=2)
-            labels = np.concatenate([labels, cur_labels], axis=1)
+            labels = np.concatenate([labels, cur_labels], axis=0)
     return images, labels
 
 
@@ -179,12 +211,18 @@ def show_classification(test_images, labels, letters):
 
     create montages of images according to estimated labels
 
-    :param test_images:     shape h x w x n
-    :param labels:          shape 1 x n
+    :param test_images:     np.array (h, w, n)
+    :param labels:          labels for input images np.array (n,)
     :param letters:         string with letters, e.g. 'CN'
     """
 
     def montage(images, colormap='gray'):
+        """
+        Show images in grid.
+
+        :param images:      np.array (h, w, n)
+        :param colormap:    numpy colormap
+        """
         h, w, count = np.shape(images)
         h_sq = np.int(np.ceil(np.sqrt(count)))
         w_sq = h_sq
@@ -204,7 +242,7 @@ def show_classification(test_images, labels, letters):
         return im_matrix
 
     for i in range(len(letters)):
-        imgs = test_images[:,:,labels[0]==i]
+        imgs = test_images[:,:,labels==i]
         subfig = plt.subplot(1,len(letters),i+1)
         montage(imgs)
         plt.title(letters[i])
