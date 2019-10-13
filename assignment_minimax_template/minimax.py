@@ -65,7 +65,7 @@ def risk_fix_q_cont(distribution_A, distribution_B, distribution_A_priors, q):
                                     distribution_A['Mean'], distribution_A['Sigma'] - python floats
     :param distribution_B:          the same as distribution_A
     :param distribution_A_priors:   priors (n, ) np.array
-    :return q:                      strategy dict - see bayes.find_strategy_2normal
+    :param q:                       strategy dict - see bayes.find_strategy_2normal
                                        q['t1'], q['t2'] - decision thresholds - python floats
                                        q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
     :return risks:                  bayesian risk of the strategy q with varying priors (n, ) np.array
