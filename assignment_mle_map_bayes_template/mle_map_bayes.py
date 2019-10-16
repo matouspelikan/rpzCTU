@@ -131,7 +131,7 @@ def mle_Bayes_classif(test_imgs, train_data_A, train_data_C):
     :param train_data_C:   training image features C (nC, )
 
     :return:               q - classification strategy (see find_strategy_2normal)
-    :return:               labels - classification of test_imgs (N, ) 0 or 1
+    :return:               labels - classification of test_imgs (N, ) (see bayes.classify_2normal)
     :return:               DA - parameters of the normal distribution of A
                             DA['Mean'] - python float
                             DA['Sigma'] - python float
@@ -167,7 +167,7 @@ def map_Bayes_classif(test_imgs, train_data_A, train_data_C,
     :param beta_C:         prior NIG parameter for C - python float
 
     :return:               q - classification strategy (see find_strategy_2normal)
-    :return:               labels - classification of test_imgs (N, ) 0 or 1
+    :return:               labels - classification of test_imgs (N, ) (see bayes.classify_2normal)
     :return:               DA - parameters of the normal distribution of A
                             DA['Mean'] - python float
                             DA['Sigma'] - python float
@@ -202,7 +202,7 @@ def bayes_Bayes_classif(x_test, x_train_A, x_train_C,
     :param alpha_C:        prior NIG parameter for C - python float
     :param beta_C:         prior NIG parameter for C - python float
 
-    :return:               labels - classification of x_test (n, ) 0 or 1
+    :return:               labels - classification of x_test (n, ) int32, values 0 or 1
     """
     raise NotImplementedError("You have to implement this function.")
 
