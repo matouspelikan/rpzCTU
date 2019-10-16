@@ -15,7 +15,7 @@ def my_parzen(x, x_trn, h):
     :param x:       vector of data points where the probability density functions
                     should be evaluated, (n,) np array
     :param x_trn:   training data (m,) np array
-    :param h:       kernel bandwidth, python flo at
+    :param h:       kernel bandwidth, python float
     :return p:      estimated p(x|k) evaluated at values given by x (n,) np array
     """
 
@@ -53,10 +53,10 @@ def classify_bayes_parzen(x_test, xA, xC, pA, pC, h_bestA, h_bestC):
     :param x_test:  data (measurements) to be classified (n,) np array
     :param xA:      training data for Parzen window for class A (n_xA,) np array
     :param xC:      training data for Parzen window for class C (n_xC,) np array
-    :param pA:      prior probabilities, python float
-    :param pC:      prior probabilities, python float
-    :param h_bestA: optimal values of the kernel bandwidth, python float
-    :param h_bestC: optimal values of the kernel bandwidth, python float
+    :param pA:      prior probability for class A, python float
+    :param pC:      prior probability for class C, python float
+    :param h_bestA: optimal value of the kernel bandwidth, python float
+    :param h_bestC: optimal value of the kernel bandwidth, python float
     :return labels: classification labels for x_test (n,) np array
     """
 
