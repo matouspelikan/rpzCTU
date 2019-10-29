@@ -10,12 +10,13 @@ def logistic_loss(X, y, w):
 
     Evaluates the logistic loss function.
 
-    :param X:  d-dimensional observations, np array <d x number_of_observations>
-    :param y:  labels of the observations, np array <1 x number_of_observations>, values -1, +1
-    :param w:  weights, np array <d x 1>
-    :return:   calculated loss (scalar)
+    :param X:    d-dimensional observations, np.array (d, n)
+    :param y:    labels of the observations, np.array (n, )
+    :param w:    weights, np.array (d, )
+    :return E:   calculated loss, python float
     """
     raise NotImplementedError("You have to implement this function.")
+    E = None
     return E
 
 
@@ -25,12 +26,13 @@ def logistic_loss_gradient(X, y, w):
 
     Calculates gradient of the logistic loss function.
 
-    :param X:  d-dimensional observations, np array <d x number_of_observations>
-    :param y:  labels of the observations, np array <1 x number_of_observations>, values -1, +1
-    :param w:  weights, np array <d x 1>
-    :return:   g - resulting gradient vector, np array <d x 1>
+    :param X:   d-dimensional observations, np.array (d, n)
+    :param y:   labels of the observations, np.array (n, )
+    :param w:   weights, np.array (d, )
+    :return g:  resulting gradient vector, np.array (d, )
     """
     raise NotImplementedError("You have to implement this function.")
+    g = None
     return g
 
 
@@ -40,15 +42,16 @@ def logistic_loss_gradient_descent(X, y, w_init, epsilon):
 
     Performs gradient descent optimization of the logistic loss function.
 
-    :param X:       d-dimensional observations, np array <d x number_of_observations>
-    :param y:       labels of the observations, np array <1 x number_of_observations>, values -1, +1
-    :param w_init:  initial weights, np array <d x 1>
-    :param epsilon: parameter of termination condition: np.norm(w_new - w_prev) <= epsilon
-    :return:        w - resulting weights, np array <d x 1>
-                    wt - progress of weights, np array <d x number_of_accepted_candidates>
-                    Et - progress of logistic loss, np array <1 x number_of_accepted_candidates>
+    :param X:       d-dimensional observations, np.array (d, n)
+    :param y:       labels of the observations, np.array (n, )
+    :param w_init:  initial weights, np.array (d, )
+    :param epsilon: parameter of termination condition: np.norm(w_new - w_prev) <= epsilon, python float
+    :return w:      w - resulting weights, np.array (d, )
+    :return wt:     wt - progress of weights, np.array (d, number_of_accepted_candidates)
+    :return Et:     Et - progress of logistic loss, np.array (number_of_accepted_candidates, )
     """
     raise NotImplementedError("You have to implement this function.")
+    w, wt, Et = None, None, None
     return w, wt, Et
 
 
@@ -58,25 +61,27 @@ def classify_images(X, w):
 
     Classification by logistic regression.
 
-    :param X: d-dimensional observations, np array <d x number_of_observations>
-    :param w: weights, np array <d x 1>
-    :return:  y - labels of the observations, np array <1 x number_of_observations>, values -1, +1
+    :param X:    d-dimensional observations, np.array (d, n)
+    :param w:    weights, np.array (d, )
+    :return y:   estimated labels of the observations, np.array (n, )
     """
     raise NotImplementedError("You have to implement this function.")
+    y = None
     return y
 
 
 def get_threshold(w):
     """
-    threshold = get_threshold(w)
+    thr = get_threshold(w)
 
     Returns the optimal decision threshold given the sigmoid parameters w
 
-    :param w: sigmoid parameters np array <2 x 1>
+    :param w:    weights, np.array (d, )
     :return: calculated threshold (scalar)
     """
     raise NotImplementedError("You have to implement this function.")
-    return threshold
+    thr = None
+    return thr
 
 
 ################################################################################
@@ -85,93 +90,65 @@ def get_threshold(w):
 #####                                                                      #####
 ################################################################################
 
-def plot_gradient_descent(X, y, loss_function, w, wt, Et):
+def plot_gradient_descent(X, y, loss_function, w, wt, Et, min_w=-10, max_w=10, n_points=20):
     """
     plot_gradient_descent(X, y, loss_function, w, wt, Et)
 
     Plots the progress of the gradient descent.
 
-    :param X:               d-dimensional observations, np array <d x number_of_observations>
-    :param y:               labels of the observations, np array <1 x number_of_observations>, values -1, +1
-    :param loss_function:   logistic loss function
-    :param w:               weights, np array <d x 1>
-    :param wt:              progress of weights, np array <d x number_of_accepted_candidates>
-    :param Et:              progress of logistic loss, np array <1 x number_of_accepted_candidates>
+    :param X:               d-dimensional observations, np.array (d, n)
+    :param y:               labels of the observations, np.array (n, )
+    :param loss_function:   pointer to a logistic loss function
+    :param w:               weights, np.array (d, )
+    :param wt:              progress of weights, np.array (d, number_of_accepted_candidates)
+    :param Et:              progress of logistic loss, np.array (number_of_accepted_candidates, )
     :return:
     """
 
-    assert (len(X.shape) == 2)
-    assert (len(y.shape) == 2) and (y.shape[0] == 1)
-    assert (len(wt.shape) == 2)
-    assert (len(w.shape) == 2) and (w.shape[1] == 1)
-    assert (len(Et.shape) == 2) and (Et.shape[0] == 1)
 
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.gca(projection='3d')
+    if X.shape[0] != 2:
+        raise NotImplementedError('Only 2-d loss functions can be visualized using this method.')
 
-    # Plot loss function
-
-    # Display range
-    minW = -10
-    maxW = 10
-
-    points = 20
-    if X.shape[0] == 1:
-        pass
-        # w = np.linspace(minW, maxW, points)
-        # L = arrayfun(lambda weights: loss_function(X, y, weights), w)
-        # plt.plot(w.T, L.T)
-    elif X.shape[0] == 2:
-        W1, W2 = np.meshgrid(np.linspace(minW, maxW, points), np.linspace(minW, maxW, points))
-        L = np.zeros_like(W1)
-        for i in range(W1.shape[0]):
-            for j in range(W1.shape[1]):
-                L[i, j] = loss_function(X, y, np.array([[W1[i, j], W2[i, j]]]).T)
-        surf = ax.plot_surface(W1, W2, L, cmap='plasma')
-        ax.view_init(90, 90)
-
-        plt.title('Gradient descent')
-
-        plt.colorbar(surf, ax=ax)
-    else:
-        raise NotImplementedError('Only 1-d and 2-d loss functions can be visualized using this method.')
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.gca()
 
     # Plot the gradient descent
-
-    offset = 0.05
+    W1, W2 = np.meshgrid(np.linspace(min_w, max_w, n_points), np.linspace(min_w, max_w, n_points))
+    L = np.zeros_like(W1)
+    for i in range(n_points):
+        for j in range(n_points):
+            L[i, j] = loss_function(X, y, np.array([W1[i, j], W2[i, j]]))
+    z_min, z_max = np.min(L), np.max(L)
+    c = ax.pcolor(W1, W2, L, cmap='viridis', vmin=z_min, vmax=z_max, edgecolor='k')
+    fig.colorbar(c, ax=ax)
 
     # Highlight the found minimum
-    ax.plot3D(w[0, :], w[1, :], logistic_loss(X, y, w) + offset, 'gs', markersize=15)
-
-    ax.plot3D(wt[0, :], wt[1, :], Et.flatten() + offset, 'w.', markersize=15)
-    ax.plot3D(wt[0, :], wt[1, :], Et.flatten() + offset, 'w-', markersize=15)
-
-    plt.axis('equal')
-    plt.xlim([np.min(wt[0, :]), np.max(wt[0, :])])
-    plt.ylim([np.min(wt[1, :]), np.max(wt[1, :])])
-
+    plt.plot([w[0]], w[1], 'rs', markersize=15, fillstyle='none')
+    plt.plot(wt[0, :], wt[1, :], 'w.', markersize=15, linewidth=1)
+    plt.plot(wt[0, :], wt[1, :], 'w-', markersize=15, linewidth=1)
+    plt.xlim([min_w, max_w])
+    plt.ylim([min_w, max_w])
     plt.xlabel('w_0')
     plt.ylabel('w_1')
+    plt.title('Gradient descent')
 
 
 def plot_aposteriori(X, y, w):
     """
     plot_aposteriori(X, y, w)
 
-    :param X:               d-dimensional observations, np array <d x number_of_observations>
-    :param y:               labels of the observations, np array <1 x number_of_observations>, values -1, +1
-    :param w:               weights, np array <d x 1>
+    :param X:    d-dimensional observations, np.array (d, n)
+    :param y:    labels of the observations, np.array (n, )
+    :param w:    weights, np.array (d, )
     """
-    assert (len(X.shape) == 2)
-    assert (len(y.shape) == 2) and (y.shape[0] == 1)
-    assert (len(w.shape) == 2) and (w.shape[1] == 1)
 
-    xA = X[y == 1]
-    xC = X[y == -1]
 
-    plot_range = np.linspace(np.min(X) - 0.5, np.max(X) + 0.5, 100)
-    pAx = 1 / (1 + np.exp(-plot_range * w[1, 0] - w[0, 0]))
-    pCx = 1 / (1 + np.exp(plot_range * w[1, 0] + w[0, 0]))
+    xA = X[:,y == 1]
+    xC = X[:,y == -1]
+
+    plot_range = np.linspace(np.min(X[1,:]) - 0.5, np.max(X[1,:]) + 0.5, 100)
+    pAx = 1 / (1 + np.exp(-plot_range * w[1] - w[0]))
+    pCx = 1 / (1 + np.exp(plot_range * w[1] + w[0]))
 
     thr = get_threshold(w)
 
@@ -191,30 +168,28 @@ def compute_measurements(imgs, norm_parameters=None):
     Compute measurement on images, subtract sum of right half from sum of
     left half.
 
-    :param imgs:            set of images, <h x w x n>
-    :param norm_parameters: [[mean, std]], np array <1 x 2>
-    :return:                x - measurements, <1 x n>
-                            norm_parameters - [[mean, std]], np array <1 x 2>
+    :param imgs:              input images, np array (h, w, n)
+    :param norm_parameters:   norm_parameters['mean'] python float
+                              norm_parameters['std']  python float
+    :return x:                measurements, np array (n, )
+    :return norm_parameters:  norm_parameters['mean'] python float
+                              norm_parameters['std']  python float
     """
-    assert (len(imgs.shape) == 3)
-    assert (norm_parameters is None) or (norm_parameters.shape == (1,2))
+
 
     width = imgs.shape[1]
     sum_rows = np.sum(imgs, dtype=np.float64, axis=0)
 
-    x = np.sum(sum_rows[0:int(width / 2),:],axis=0) - np.sum(sum_rows[int(width / 2):,:], axis=0)
-    x = np.atleast_2d(x)
+    left_half  = np.sum(sum_rows[:int(width // 2),:], axis=0)
+    right_half = np.sum(sum_rows[int(width // 2):,:], axis=0)
+    x = left_half - right_half
 
     if norm_parameters is None:
         # If normalization parameters are not provided, compute it from data
-        norm_parameters = np.array([np.mean(x), np.std(x)], np.float64)
-    else:
-        norm_parameters = norm_parameters.flatten()
+        norm_parameters = {'mean': float(np.mean(x)), 'std': float(np.std(x))}
 
-    x = (x - norm_parameters[0]) / norm_parameters[1]
-    norm_parameters = np.atleast_2d(norm_parameters)
+    x = (x - norm_parameters['mean']) / norm_parameters['std']
 
-    assert (norm_parameters.shape == (1,2))
     return x, norm_parameters
 
 
@@ -224,15 +199,19 @@ def show_classification(test_images, labels, letters):
 
     create montages of images according to estimated labels
 
-    :param test_images:     shape h x w x n
-    :param labels:          shape 1 x n
+    :param test_images:     np.array (h, w, n)
+    :param labels:          labels for input images np.array (n,)
     :param letters:         string with letters, e.g. 'CN'
     """
-    assert (len(test_images.shape) == 3)
-    assert (len(labels.shape) == 2) and (labels.shape[0] == 1)
 
     def montage(images, colormap='gray'):
-        h, w, count = np.shape(images)
+        """
+        Show images in grid.
+
+        :param images:      np.array (h, w, n)
+        :param colormap:    numpy colormap
+        """
+        h, w, count = images.shape
         h_sq = np.int(np.ceil(np.sqrt(count)))
         w_sq = h_sq
         im_matrix = np.zeros((h_sq * h, w_sq * w))
@@ -252,36 +231,34 @@ def show_classification(test_images, labels, letters):
 
     unique_labels = np.unique(labels).flatten()
     for i in range(len(letters)):
-        imgs = test_images[:,:,labels[0]==unique_labels[i]]
+        imgs = test_images[:,:,labels==unique_labels[i]]
         subfig = plt.subplot(1,len(letters),i+1)
         montage(imgs)
         plt.title(letters[i])
 
 
-def show_mnist_classification(imgs, labels, imsize=None):
+
+
+def show_mnist_classification(imgs, labels, imgs_shape=None):
     """
     function show_mnist_classification(imgs, labels)
 
     Shows results of MNIST digits classification.
 
-    :param imgs:    set of images, 2D np array <(w x h) x n>
-    :param labels:  estimated labels for the images, np array <1 x n>
-    :param imsize:  estimated labels for the images, np array <1 x n>
+    :param imgs:         flatten images - d-dimensional observations, np.array (height x width, n)
+    :param labels:       labels for input images np.array (n,)
+    :param imgs_shape:   image dimensions, np.array([height, width])
     :return:
     """
-    assert (len(imgs.shape) == 2)
-    assert (len(labels.shape) == 2) and (labels.shape[0] == 1)
-    assert (imsize is None) or ((len(imsize.shape) == 2) and (imsize.shape[0] == 1))
 
-    if imsize is None:
-        imsize = np.array([[28,28]])
+    if imgs_shape is None:
+        imgs_shape = np.array([28, 28])
 
-    imsize = imsize.flatten()
-    nImages = imgs.shape[1]
-    images = np.zeros([imsize[0], imsize[1], nImages])
+    n_images = imgs.shape[1]
+    images = np.zeros([imgs_shape[0], imgs_shape[1], n_images])
 
-    for i in range(nImages):
-        images[:, :, i] = np.reshape(imgs[:, i], [imsize[0], imsize[1]])
+    for i in range(n_images):
+        images[:, :, i] = np.reshape(imgs[:, i], [imgs_shape[0], imgs_shape[1]])
 
     plt.figure(figsize=(20,10))
     show_classification(images, labels, '01')
