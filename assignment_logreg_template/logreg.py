@@ -10,7 +10,7 @@ def logistic_loss(X, y, w):
 
     Evaluates the logistic loss function.
 
-    :param X:    d-dimensional observations, np.array (d, n)
+    :param X:    d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param y:    labels of the observations, np.array (n, )
     :param w:    weights, np.array (d, )
     :return E:   calculated loss, python float
@@ -26,7 +26,7 @@ def logistic_loss_gradient(X, y, w):
 
     Calculates gradient of the logistic loss function.
 
-    :param X:   d-dimensional observations, np.array (d, n)
+    :param X:   d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param y:   labels of the observations, np.array (n, )
     :param w:   weights, np.array (d, )
     :return g:  resulting gradient vector, np.array (d, )
@@ -42,7 +42,7 @@ def logistic_loss_gradient_descent(X, y, w_init, epsilon):
 
     Performs gradient descent optimization of the logistic loss function.
 
-    :param X:       d-dimensional observations, np.array (d, n)
+    :param X:       d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param y:       labels of the observations, np.array (n, )
     :param w_init:  initial weights, np.array (d, )
     :param epsilon: parameter of termination condition: np.norm(w_new - w_prev) <= epsilon, python float
@@ -61,7 +61,7 @@ def classify_images(X, w):
 
     Classification by logistic regression.
 
-    :param X:    d-dimensional observations, np.array (d, n)
+    :param X:    d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param w:    weights, np.array (d, )
     :return y:   estimated labels of the observations, np.array (n, )
     """
@@ -77,7 +77,7 @@ def get_threshold(w):
     Returns the optimal decision threshold given the sigmoid parameters w (for 1D data).
 
     :param w:    weights, np.array (2, )
-    :return: calculated threshold (scalar)
+    :return:     calculated threshold (scalar)
     """
     raise NotImplementedError("You have to implement this function.")
     thr = None
@@ -96,7 +96,7 @@ def plot_gradient_descent(X, y, loss_function, w, wt, Et, min_w=-10, max_w=10, n
 
     Plots the progress of the gradient descent.
 
-    :param X:               d-dimensional observations, np.array (d, n)
+    :param X:               d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param y:               labels of the observations, np.array (n, )
     :param loss_function:   pointer to a logistic loss function
     :param w:               weights, np.array (d, )
@@ -137,7 +137,7 @@ def plot_aposteriori(X, y, w):
     """
     plot_aposteriori(X, y, w)
 
-    :param X:    d-dimensional observations, np.array (d, n)
+    :param X:    d-dimensional observations with X[0, :] == 1, np.array (d, n)
     :param y:    labels of the observations, np.array (n, )
     :param w:    weights, np.array (d, )
     """
