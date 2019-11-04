@@ -74,9 +74,9 @@ def get_threshold(w):
     """
     thr = get_threshold(w)
 
-    Returns the optimal decision threshold given the sigmoid parameters w
+    Returns the optimal decision threshold given the sigmoid parameters w (for 1D data).
 
-    :param w:    weights, np.array (d, )
+    :param w:    weights, np.array (2, )
     :return: calculated threshold (scalar)
     """
     raise NotImplementedError("You have to implement this function.")
