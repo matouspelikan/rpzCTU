@@ -1,101 +1,94 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from scipy.stats import norm
-import math
 import numpy as np
-import scipy.io
-import matplotlib
 import matplotlib.pyplot as plt
-from scipy.stats import norm
-from PIL import Image
-
-import copy
 
 
 def my_svm(X, y, C, options=None):
     """
-    w, b, sv_idx = my_svm(X, y, C, options)
+    Solves linear soft-margin SVM dual task and outputs w, b and support vectors indices
 
-    MY_SVM Solves linear soft-margin SVM dual task and outputs w, b and support vectors indices
-
-    :param X:       matrix containing feature points in columns, np array <n x m>
-    :param y:       vector with labels (-1, 1) for feature points in X, np array <1 x m>
-    :param C:       number with regularization constant C, scalar or np array <1 x 1>
+    :param X:       matrix containing feature points in columns, np array (d, n)
+    :param y:       vector with labels (-1, 1) for feature points in X, np array (n, )
+    :param C:       number with regularization constant C, scalar
     :param options: (optional) dict that holds options for gsmo QP solver fields:
                     options['verb'] (verbosity of QP solver),
                     options['tmax'] (maximal number of iterations, default is inf)
-    :return:        w - normal vector of the separating hyperplane, np array <n x 1>
-                    b - number, the bias term, scalar or np array <1 x 1>
-                    sv_idx - vector with indices of support vectors, np array <p x 1>
-
+    :return w:      normal vector of the separating hyperplane, np array (d, )
+    :return b:      number, the bias term, scalar
+    :return sv_idx: vector with indices of support vectors, np array (p, )
     """
+
+
     if options is None:
         options = {}
     options['verb'] = options['verb'] if 'verb' in options else True
     options['tmax'] = options['tmax'] if 'tmax' in options else np.inf
 
     raise NotImplementedError("You have to implement this function.")
-
+    w, b, sv_idx = None, None, None
     return w, b, sv_idx
 
-def classif_lin_svm(X, model):
+
+def classif_linear_svm(X, model):
     """
-    classif = classif_lin_svm(X, model)
+    classifies data using the provided linear model
 
-    CLASSIF_LIN_SVM classifies data using the provided linear model
+    :param X:        matrix containing feature points in columns, np array (d, n)
+    :param model:    model represented as dict with keys 'w' and 'b', dict
+        - model['w'] - model weights, np array (d, )
+        - model['b'] - representing model bias, scalar
 
-    :param X:       matrix containing feature points in columns, np array <n x m>
-    :param model:   model represented as dict with keys 'w' and 'b'
-        - model['w'] - <n x 1> np.array with model weights
-        - model['b'] - scalar representing model bias
-
-    :return:        labels (-1, 1) for feature points in X, np array <1 x m>
+    :return classif: labels (-1, 1) for feature points in X, np array (n, )
 
     """
+
     raise NotImplementedError("You have to implement this function.")
-
+    classif = None
     return classif
+
 
 def compute_measurements_2d(data, normalization=None):
     """
-    X, y, normalization = compute_measurements_2d(data, normalization)
-
-    COMPUTE_MEASUREMENTS_2D computes 2D features from image measurements
+    Computes 2D features from image measurements
 
     :param data:          dict with keys 'images' and 'labels'
-        - data['images'] - <H x W x N_images> np.uint8 array of images
-        - data['labels'] - <N_images x > np.array of image labels (1 or 2)
+        - data['images'] - (h, w, n) np.uint8 array of images
+        - data['labels'] - (n, ) np array of image labels (-1 or 1)
     :param normalization: - optional - dict with keys 'a_mean', 'a_std', 'b_mean', 'b_std'
         - normalization['a_mean'] - mean of the LR feature
         - normalization['a_std'] - std of the LR feature
         - normalization['b_mean'] - mean of the UD feature
         - normalization['b_std'] - std of the UD feature
 
-    :return:              X - <2 x N_images> np.array of features
-                          y - <N_images, > np.array of image labels (1 and -1)
+    :return:              X - (2, n) np array of features
+                          y - (n, ) np array of image labels (1 and -1)
                           normalization - same as :param normalization:,
                                           computed from data if normalization parameter not provided
     """
-    raise NotImplementedError("You have to implement this function.")
 
+    raise NotImplementedError("You have to implement this function.")
+    X, y, normalization = None, None, None
     return X, y, normalization
+
 
 def compute_test_error(itrn, itst, X, y, C):
     """
-    COMPUTE_TSTERR Computes mean risk computed over crossvalidation folds (train svm on train set and evaluate on test set)
+    Computes mean risk computed over crossvalidation folds (train svm on train set and evaluate on test set)
 
-    :param itrn: list with training data indices folds (from crossval function)
-    :param itst: list with testing data indices folds (from crossval function)
-    :param X:    <n x m> np.array - input feature vector
-    :param y:    <m x > np.array - labels 1, -1
-    :param C:    scalar regularization constant C
+    :param itrn:  list with training data indices folds (from crossval function)
+    :param itst:  list with testing data indices folds (from crossval function)
+    :param X:     input feature vector, (n, m) np array
+    :param y:     labels 1, -1, (m, ) np array
+    :param C:     regularization constant C, scalar
 
-    :return:     mean test error - mean (over the crossval folds) of number of errors
+    :return mean: mean test error
     """
     raise NotImplementedError("You have to implement this function.")
+    error = None
+    return error
 
-    return mean_test_error
 
 ################################################################################
 #####                                                                      #####
@@ -103,49 +96,44 @@ def compute_test_error(itrn, itst, X, y, C):
 #####                                                                      #####
 ################################################################################
 
-def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x0=None, nabla0=None, tolKKT=0.001, verb=0, tmax=np.inf):
+def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x_init=None, nabla_0=None, tolerance_KKT=0.001, verb=0, t_max=np.inf):
     """
     GSMO Generalized SMO algorithm for classifier design.
 
-    Translated to Python from:
+    Reimplemented to Python from:
     https://gitlab.fel.cvut.cz/smidm/statistical-pattern-recognition-toolbox
 
     Description:
-     This function implements the generalized SMO algorithm which solves
-      the following QP task:
+        This function implements the generalized SMO algorithm which solves
+        the following QP task:
 
-      min Q_P(x) = 0.5*x'*H*x + f'*x
-       x
+        min_x Q_P(x) = 0.5*x'*H*x + f'*x
 
-      s.t.    a'*x = b
+        s.t.  a'*x = b
               lb(i) <= x(i) <= ub(i)   for all i=1:n
 
-     Reference:
-      S.S.Keerthi, E.G.Gilbert: Convergence of a generalized SMO algorithm for SVM
-      classifier design. Machine Learning, Vol. 46, 2002, pp. 351-360.
+    Reference:
+        S.S.Keerthi, E.G.Gilbert: Convergence of a generalized SMO algorithm for SVM
+        classifier design. Machine Learning, Vol. 46, 2002, pp. 351-360.
 
-    Input:
-     H [n x n] Symmetric positive semidefinite matrix.
-     f [n x 1] Vector.
-     a [n x 1] Vector which must not contain zero entries.
-     b [1 x 1] Scalar; default: 0
-     lb [n x 1] Lower bound; default: -inf
-     ub [n x 1] Upper bound; default: inf
-     x0 [n x 1] Initial solution;
-     nabla0 [n x 1] Nabla0 = H*x0 + f.
-     tolKKT [1 x 1] Determines relaxed KKT conditions (default tolKKT=0.001);
-                    it correspondes to $\tau$ in Keerthi's paper.
-     verb [1 x 1] if > 0 then prints info every verb-th iterations (default 0)
-     tmax [1 x 1] Maximal number of iterations (default inf).
+    :param H:               symmetric positive semidefinite matrix, np array (n, n)
+    :param f:               vector, np array (n, )
+    :param a:               vector which must not contain zero entries, np array (n, )
+    :param b:               scalar [default: 0]
+    :param lb:              lower bound, np array (n, ) [default: -inf]
+    :param ub:              upper bound, np array (n, ) [default: +inf]
+    :param x_init:          initial solution, np array (n, )
+    :param nabla_0:         Nabla0 = H*x0 + f, np array (n, )
+    :param tolerance_KKT:   Determines relaxed KKT conditions. It correspondes to $\tau$ in Keerthi's paper.
+                            scalar [default: tolKKT=0.001]
+    :param verb:            if > 0 then prints info every verb-th iterations, scalar [default: 0]
+    :param t_max:           maximal number of iterations, scalar [default: +inf]
 
-    Output:
-     tuple(
-       x [n x 1] Solution vector.
-       fval [1 x 1] Atteined value of the optimized QP criterion fval=Q_P(x);
-       t [1x1] Number of iterations.
-       finished [1x1] Has found an optimal solution
-     )
-     """
+    :return x:              solution vector, np array (n, )
+    :return fval:           atteined value of the optimized QP criterion fval=Q_P(x), scalar
+    :return t:              number of iterations, scalar
+    :return finished:       True if an optimal solution was found, boolean
+    """
 
     # Setup
     if (np.isscalar(lb)):
@@ -154,41 +142,36 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x0=None, nabla0=None, tolKKT=0.001
     if (np.isscalar(ub)):
         ub = np.array([ub] * len(f))
 
-    if (x0 is None):
+    if (x_init is None):
         # Find feasible x0
-        x0 = np.zeros(len(f))
-        xa = 0;
+        x_init = np.zeros(len(f))
+        xa = 0
         i = 0
-        while (not np.allclose(np.dot(x0, a), b)):
+        while (not np.allclose(np.dot(x_init, a), b)):
             if (i >= len(a)):
                 raise ValueError("Constraints cannot be satisfied")
-            x0[i] = np.clip((b - xa) / a[i], lb[i], ub[i])
-            xa += x0[i] * a[i]
+            x_init[i] = np.clip((b - xa) / a[i], lb[i], ub[i])
+            xa += x_init[i] * a[i]
             i += 1
     else:
-        x0 = np.clip(x0, lb, ub)
+        x_init = np.clip(x_init, lb, ub)
 
-    if (nabla0 is None):
-        nabla0 = np.dot(H, x0) + f
+    if (nabla_0 is None):
+        nabla_0 = np.dot(H, x_init) + f
 
     # Initialization
     t = 0
     finished = False
-    x = np.copy(x0)
-    nabla = np.copy(nabla0)
+    x = np.copy(x_init)
+    nabla = np.copy(nabla_0)
 
     # SMO
-    while (t < tmax):
+    while (t < t_max):
         assert np.allclose(x, np.clip(x, lb, ub))  # x0 within bounds
 
         # Find the most violating pair of variables
         (minF, minI) = (np.inf, 0)
         (maxF, maxI) = (-np.inf, 0)
-        a = np.squeeze(a)
-        nabla = np.squeeze(nabla)
-        x = np.squeeze(x)
-        lb = np.squeeze(lb)
-        ub = np.squeeze(ub)
         F = nabla / a
         x_feas = np.logical_and(lb < x, x < ub)
         a_pos = a > 0
@@ -197,17 +180,8 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x0=None, nabla0=None, tolKKT=0.001
         x_lb = x == lb
         x_ub = x == ub
 
-        min_mask = np.logical_or.reduce((x_feas,
-                                        np.logical_and(x_lb,
-                                                        a_pos),
-                                        np.logical_and(x_ub,
-                                                        a_neg)))
-        max_mask = np.logical_or.reduce((x_feas,
-                                        np.logical_and(x_lb,
-                                                        a_neg),
-                                        np.logical_and(x_ub,
-                                                        a_pos)))
-
+        min_mask = np.logical_or.reduce((x_feas, np.logical_and(x_lb, a_pos), np.logical_and(x_ub, a_neg)))
+        max_mask = np.logical_or.reduce((x_feas, np.logical_and(x_lb, a_neg), np.logical_and(x_ub, a_pos)))
 
         if np.sum(max_mask) > 0:
             tmp = F.copy()
@@ -222,7 +196,7 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x0=None, nabla0=None, tolKKT=0.001
             minF = tmp[minI]
 
         # Check KKT conditions
-        if (maxF - minF <= tolKKT):
+        if (maxF - minF <= tolerance_KKT):
             finished = True
             break
 
@@ -255,12 +229,13 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x0=None, nabla0=None, tolKKT=0.001
         # Print iter info
         if (verb > 0 and t % verb == 0):
             obj = 0.5 * np.sum(x * nabla + x * f)
-            print "t=%d, KKTviol=%f, tau=%f, tau_lb=%f, tau_ub=%f, Q_P=%f" % \
-                  (t, maxF - minF, tau, max(tau_lb_u, tau_lb_v), min(tau_ub_u, tau_ub_v), obj)
+            print("t=%d, KKTviol=%f, tau=%f, tau_lb=%f, tau_ub=%f, Q_P=%f" % \
+                  (t, maxF - minF, tau, max(tau_lb_u, tau_lb_v), min(tau_ub_u, tau_ub_v), obj))
             # raw_input()
 
     fval = 0.5 * np.dot(x, nabla + f)
     return x, fval, t, finished
+
 
 def show_classification(test_images, labels, letters):
     """
@@ -268,11 +243,18 @@ def show_classification(test_images, labels, letters):
 
     create montages of images according to estimated labels
 
-    :param test_images:     shape h x w x n
-    :param labels:          shape 1 x n
+    :param test_images:     np array (h, w, n)
+    :param labels:          labels for input images np array (n,)
     :param letters:         string with letters, e.g. 'CN'
     """
+
     def montage(images, colormap='gray'):
+        """
+        Show images in grid.
+
+        :param images:      np array (h, w, n)
+        :param colormap:    numpy colormap
+        """
         h, w, count = np.shape(images)
         h_sq = np.int(np.ceil(np.sqrt(count)))
         w_sq = h_sq
@@ -292,10 +274,11 @@ def show_classification(test_images, labels, letters):
         return im_matrix
 
     for i in range(len(letters)):
-        imgs = test_images[:,:,labels[0]==i]
+        imgs = test_images[:,:,labels==i]
         subfig = plt.subplot(1,len(letters),i+1)
         montage(imgs)
         plt.title(letters[i])
+
 
 def crossval(num_data, num_folds):
     """
@@ -310,14 +293,17 @@ def crossval(num_data, num_folds):
 
     :param num_data:    number of data (scalar, integer)
     :param num_folds:   number of folders (scalar, integer)
-    :return:            itrn - LIST of training folds, itst - LIST of testing folds
-                        itrn[i] indices of training data of i-th folder <1 x n> np array
-                        itst[i] indices of testing data of i-th folder <1 x n> np array
+
+    :return itrn:       LIST of training folds
+                         itrn[i] - (n, ) np.array of i-th fold indices into the training data
+    :return itst:       LIST of testing folds
+                         itst[i] - (n, ) np.array of i-th fold indices into the testing data
     """
     if num_folds < 2:
+        print("Minimal number of folds set to 2.")
         num_folds = 2
 
-    inx = np.expand_dims(np.random.permutation(num_data), 0)
+    inx = np.random.permutation(num_data)
 
     itrn = []
     itst = []
@@ -327,16 +313,18 @@ def crossval(num_data, num_folds):
     for idx in range(num_folds):
         tst_idx = range((idx * num_column), np.min([num_data, ((idx + 1) * num_column)]))
         trn_idx = [i for i in list(range(num_data)) if i not in tst_idx]
-        itst.append(inx[:, tst_idx])
-        itrn.append(inx[:, trn_idx])
+        itst.append(inx[tst_idx])
+        itrn.append(inx[trn_idx])
     return itrn, itst
 
-def plot_pts(X, y):
-    ''' Plots 2D points from two classes
 
-    Args:
-    - X (2xN np.array) - input data
-    - y (1xN, np.array containing -1,+1) - class labels -1 / +1'''
+def plot_points(X, y):
+    """
+    Plots 2D points from two classes
+
+    :param X: input data, np array (2, n)
+    :param y: class labels (classes -1, +1), np array (n, )
+    """
     y = np.squeeze(y)
     pts_A = X[:, y > 0]
     pts_B = X[:, y < 0]
@@ -344,14 +332,18 @@ def plot_pts(X, y):
     plt.scatter(pts_A[0, :], pts_A[1, :])
     plt.scatter(pts_B[0, :], pts_B[1, :])
 
-def plot_boundary(ax, w, b, support_vectors=None):
-    ''' Plots 2-class linear decision boundary
 
-    Args:
-    - ax (matplotlib Axes) - axes to draw onto
-    - w (2x1 np.array) - model weights
-    - b (scalar) - model bias
-    - support_vectors (2xN np.array, optional) - coordinates of the support vectors'''
+def plot_boundary(ax, w, b, support_vectors=None):
+    """
+    Plots 2-class linear decision boundary
+
+    :param ax:              axes to draw onto, matplotlib Axes
+    :param w:               model weights, np array (2, )
+    :param b:               model bias, scalar
+    :param support_vectors: (optional) coordinates of the support vectors, np array (2, n)
+    :return:
+    """
+
     y_lim = ax.get_ylim()
     x_lim = ax.get_xlim()
 
