@@ -12,8 +12,8 @@ def adaboost(X, y, num_steps):
     :param num_steps:           maximum number of iterations
 
     :return strong_classifier:  dict with fields:
-        - strong_classifier['wc'] - list of weak classifiers (see docstring of find_best_weak)
-        - strong_classifier['alpha'] - list of weak classifier coefficients
+        - strong_classifier['wc'] - weak classifiers (see docstring of find_best_weak), np array (n_wc, )
+        - strong_classifier['alpha'] - weak classifier coefficients, np array (n_wc, )
     :return wc_errors:          error of the best weak classifier in each iteration, np array (n_wc, )
     :return upper_bound:        upper bound on the training error in each iteration, np array (n_wc, )
     """
@@ -77,9 +77,9 @@ def find_best_weak(X, y, D):
     :param D:           training data weights, np array (n, )
 
     :return wc:         dict representing weak classifier with following fields:
-        - wc['idx'] - index of the selected weak classifier
-        - wc['theta'] - the classification threshold
-        - wc['parity'] - the classification parity
+        - wc['idx'] - index of the selected weak classifier, scalar
+        - wc['theta'] - the classification threshold, scalar
+        - wc['parity'] - the classification parity, scalar
     :return wc_error:   the weighted error of the selected weak classifier
     """
     assert X.ndim == 2
