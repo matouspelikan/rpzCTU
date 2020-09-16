@@ -4,7 +4,7 @@ The recommended way of using the templates is as follows.
 
 First, you clone the repository:
 ```bash
-git clone git@gitlab.fel.cvut.cz:B191_B4B33RPZ/rpz-python-assignment-templates.git
+git clone git@gitlab.fel.cvut.cz:B201_B4B33RPZ/rpz-python-assignment-templates.git
 ```
 
 Then, you create a new branch for your solutions:
