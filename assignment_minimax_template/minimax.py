@@ -17,8 +17,6 @@ def minimax_strategy_discrete(distribution1, distribution2):
 
     Find the optimal Minimax strategy for 2 discrete distributions.
 
-    Hint: Use the function mu_search_discrete() as the base for this function.
-
     :param distribution1:           pXk(x|class1) given as a (n, n) np array
     :param distribution2:           pXk(x|class2) given as a (n, n) np array
     :return q:                      optimal strategy, (n, n) np array, values 0 (class 1) or 1 (class 2)
