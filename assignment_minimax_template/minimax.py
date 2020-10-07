@@ -21,8 +21,8 @@ def minimax_strategy_discrete(distribution1, distribution2):
     :param distribution2:           pXk(x|class2) given as a (n, n) np array
     :return q:                      optimal strategy, (n, n) np array, values 0 (class 1) or 1 (class 2)
     :return: opt_i:                 index of the optimal solution found during the search, Python int
-    :return: eps1:                  cumulative error on the second class for all thresholds, (n x n ,) numpy array
-    :return: eps2:                  cumulative error on the first class for all thresholds, (n x n ,) numpy array
+    :return: eps1:                  cumulative error on the first class for all thresholds, (n x n ,) numpy array
+    :return: eps2:                  cumulative error on the second class for all thresholds, (n x n ,) numpy array
     """
 
     raise NotImplementedError("You have to implement this function.")
@@ -215,14 +215,14 @@ def plot_lr_threshold(eps1, eps2, thr):
     """
     Plot the search for the strategy
 
-    :param eps1:  cumulative error on the second class for all thresholds, (n x n ,) numpy array
-    :param eps2:  cumulative error on the first class for all thresholds, (n x n ,) numpy array
+    :param eps1:  cumulative error on the first class for all thresholds, (n x n ,) numpy array
+    :param eps2:  cumulative error on the second class for all thresholds, (n x n ,) numpy array
     :param thr:   index of the optimal solution found during the search, Python int
     :return:      matplotlib.pyplot figure
     """
 
-    eps2 = np.hstack((0, eps2))  # add zero at the beginning
-    eps1 = np.hstack((1, eps1))  # add one at the beginning
+    eps2 = np.hstack((1, eps2))  # add zero at the beginning
+    eps1 = np.hstack((0, eps1))  # add one at the beginning
     thr += 1    # because 0/1 was added to the beginning of eps1 and eps2 arrays
 
     fig = plt.figure(figsize=(15, 5))
