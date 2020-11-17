@@ -11,12 +11,12 @@ def my_svm(X, y, C, options=None):
 
     :param X:       matrix containing feature points in columns, np array (d, n)
     :param y:       vector with labels (-1, 1) for feature points in X, np array (n, )
-    :param C:       number with regularization constant C, scalar
+    :param C:       regularization constant C, scalar
     :param options: (optional) dict that holds options for gsmo QP solver fields:
                     options['verb'] (verbosity of QP solver),
                     options['tmax'] (maximal number of iterations, default is inf)
     :return w:      normal vector of the separating hyperplane, np array (d, )
-    :return b:      number, the bias term, scalar
+    :return b:      the bias term, scalar
     :return sv_idx: vector with indices of support vectors, np array (p, )
     """
 
@@ -237,6 +237,53 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x_init=None, nabla_0=None, toleran
     return x, fval, t, finished
 
 
+def compute_bias(xs, ys, alphas, C):
+    """
+    Computes SVM bias from dual solution.
+
+    See https://www.csie.ntu.edu.tw/~cjlin/papers/libsvm.pdf (Section 4.1.5)
+    See http://fouryears.eu/wp-content/uploads/svm_solutions.pdf (Exercise 4) - "easy to follow" explanation
+
+    :param xs:      matrix containing feature points in columns, np array (d, n)
+    :param ys:      vector with labels (-1, 1) for feature points in X, np array (n, )
+    :param alphas:  vector with SVM dual problem solution alphas, np array (n, )
+    :param C:       regularization constant C, scalar
+
+    :return b:      the bias term, scalar
+    """
+    N = ys.size
+    bias = 0
+    eps = 1e-10
+
+    sv_mask = alphas > eps
+    not_sv_mask = np.logical_not(sv_mask)
+
+    sv_indices = np.nonzero(sv_mask)[0]
+
+    def e(i):
+        wx_i = 0
+        for svi in sv_indices:
+            wx_i += alphas[svi] * ys[svi] * np.dot(xs[:, svi], xs[:, i])
+        return ys[i] - wx_i
+
+    LB_mask = np.logical_or(
+        np.logical_and(not_sv_mask, ys == 1),
+        np.logical_and(sv_mask, ys == -1))
+    LB_ids = np.nonzero(LB_mask)[0]
+    LB = np.amax([e(i) for i in LB_ids])
+
+    UB_mask = np.logical_or(
+        np.logical_and(sv_mask, ys == 1),
+        np.logical_and(not_sv_mask, ys == -1))
+    UB_ids = np.nonzero(UB_mask)[0]
+    UB = np.amin([e(i) for i in UB_ids])
+
+    # anything between LB and UB would be correct
+    # lets just pick their mean
+    bias = (LB + UB) / 2
+    return bias
+
+
 def show_classification(test_images, labels, letters):
     """
     show_classification(test_images, labels, letters)
@@ -318,7 +365,7 @@ def crossval(num_data, num_folds):
     return itrn, itst
 
 
-def plot_points(X, y):
+def plot_points(X, y, size=None):
     """
     Plots 2D points from two classes
 
@@ -329,8 +376,8 @@ def plot_points(X, y):
     pts_A = X[:, y > 0]
     pts_B = X[:, y < 0]
 
-    plt.scatter(pts_A[0, :], pts_A[1, :])
-    plt.scatter(pts_B[0, :], pts_B[1, :])
+    plt.scatter(pts_A[0, :], pts_A[1, :], s=size)
+    plt.scatter(pts_B[0, :], pts_B[1, :], s=size)
 
 
 def plot_boundary(ax, w, b, support_vectors=None):
@@ -353,7 +400,7 @@ def plot_boundary(ax, w, b, support_vectors=None):
     xs, ys = np.meshgrid(xs, ys, indexing='ij')
 
     z = xs * w[0] + ys * w[1] + b
-    plt.contour(xs, ys, z, [0])
+    plt.contour(xs, ys, z, [-1, 0, 1], colors=['k', 'r', 'k'], linestyles=['dashed', 'solid', 'dashed'])
 
     if support_vectors is not None:
         sv_scale = (plt.rcParams['lines.markersize'] ** 2) * 5
