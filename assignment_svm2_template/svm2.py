@@ -26,10 +26,11 @@ def my_kernel_svm(X, y, C, options):
 
     :param X:       matrix containing feature points in columns, np array (d, n)
     :param y:       vector with labels (-1, 1) for feature points in X, np array (n, )
-    :param C:       number with regularization constant C, scalar
-    :param options: (optional) dict that holds options for gsmo QP solver fields:
+    :param C:       regularization constant C, scalar
+    :param options: dict that holds options for gsmo QP solver and get_kernel.
         - options['verb']   - verbosity of QP solver, boolean
         - options['t_max']  - maximal number of iterations, scalar [default: np.inf]
+
         - options['kernel'] - one of 'rbf', 'linear', 'polynomial'
         - options['sigma']  - sigma for rbf kernel (no need to specify if kernel not rbf), scalar
         - options['d']      - polynom degree for polynomial kernel (no need to specify if kernel not polynomial), scalar
@@ -46,6 +47,7 @@ def my_kernel_svm(X, y, C, options):
     raise NotImplementedError("You have to implement this function.")
     model = None
     return model
+
 
 def classif_kernel_svm(X, model):
     """
@@ -225,6 +227,53 @@ def gsmo(H, f, a, b=0, lb=-np.inf, ub=np.inf, x_init=None, nabla_0=None, toleran
     return x, fval, t, finished
 
 
+def compute_bias(K, ys, alphas, C):
+    """
+    Computes SVM bias from dual solution.
+
+    See https://www.csie.ntu.edu.tw/~cjlin/papers/libsvm.pdf (Section 4.1.5)
+    See http://fouryears.eu/wp-content/uploads/svm_solutions.pdf (Exercise 4) - "easy to follow" explanation
+
+    :param K:       matrix with kernel function values,  (n, n) np array
+    :param ys:      vector with labels (-1, 1) for feature points in X, np array (n, )
+    :param alphas:  vector with SVM dual problem solution alphas, np array (n, )
+    :param C:       regularization constant C, scalar
+
+    :return b:      the bias term, scalar
+    """
+    N = ys.size
+    bias = 0
+    eps = 1e-10
+
+    sv_mask = alphas > eps
+    not_sv_mask = np.logical_not(sv_mask)
+
+    sv_indices = np.nonzero(sv_mask)[0]
+
+    def e(i):
+        wx_i = 0
+        for svi in sv_indices:
+            wx_i += alphas[svi] * ys[svi] * K[svi, i]
+        return ys[i] - wx_i
+
+    LB_mask = np.logical_or(
+        np.logical_and(not_sv_mask, ys == 1),
+        np.logical_and(sv_mask, ys == -1))
+    LB_ids = np.nonzero(LB_mask)[0]
+    LB = np.amax([e(i) for i in LB_ids])
+
+    UB_mask = np.logical_or(
+        np.logical_and(sv_mask, ys == 1),
+        np.logical_and(not_sv_mask, ys == -1))
+    UB_ids = np.nonzero(UB_mask)[0]
+    UB = np.amin([e(i) for i in UB_ids])
+
+    # anything between LB and UB would be correct
+    # lets just pick their mean
+    bias = (LB + UB) / 2
+    return bias
+
+
 def montage(images, colormap='gray'):
     h, w, count = np.shape(images)
     h_sq = np.int(np.ceil(np.sqrt(count)))
@@ -347,7 +396,7 @@ def plot_boundary(ax, model):
     plt.contour(xs, ys, z, [0])
 
 
-def plot_points(X, y):
+def plot_points(X, y, size=None):
     """
     Plots 2D points from two classes
 
@@ -358,6 +407,6 @@ def plot_points(X, y):
     pts_A = X[:, y > 0]
     pts_B = X[:, y < 0]
 
-    plt.scatter(pts_A[0, :], pts_A[1, :])
-    plt.scatter(pts_B[0, :], pts_B[1, :])
+    plt.scatter(pts_A[0, :], pts_A[1, :], s=size)
+    plt.scatter(pts_B[0, :], pts_B[1, :], s=size)
 
