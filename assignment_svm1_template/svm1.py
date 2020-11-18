@@ -252,35 +252,51 @@ def compute_bias(xs, ys, alphas, C):
     :return b:      the bias term, scalar
     """
     N = ys.size
-    bias = 0
     eps = 1e-10
 
-    sv_mask = alphas > eps
-    not_sv_mask = np.logical_not(sv_mask)
+    # check if there are support vectors exactly on the margin
+    on_margin_mask = np.logical_and(alphas > eps, alphas < C)
+    if np.any(on_margin_mask):
+        # there are some! lets do the obvious bias computation
+        ids = np.nonzero(on_margin_mask)[0]
 
-    sv_indices = np.nonzero(sv_mask)[0]
+        bias = 0
+        for svi in ids:
+            s = 0
+            for i in range(N):
+                s += alphas[i] * ys[i] * np.dot(xs[:, i], xs[:, svi])
 
-    def e(i):
-        wx_i = 0
-        for svi in sv_indices:
-            wx_i += alphas[svi] * ys[svi] * np.dot(xs[:, svi], xs[:, i])
-        return ys[i] - wx_i
+            bias += ys[svi] - s
+        bias /= len(ids)
+    else:
+        # no support vectors exactly on the margin
+        sv_mask = alphas > eps
+        not_sv_mask = np.logical_not(sv_mask)
 
-    LB_mask = np.logical_or(
-        np.logical_and(not_sv_mask, ys == 1),
-        np.logical_and(sv_mask, ys == -1))
-    LB_ids = np.nonzero(LB_mask)[0]
-    LB = np.amax([e(i) for i in LB_ids])
+        sv_indices = np.nonzero(sv_mask)[0]
 
-    UB_mask = np.logical_or(
-        np.logical_and(sv_mask, ys == 1),
-        np.logical_and(not_sv_mask, ys == -1))
-    UB_ids = np.nonzero(UB_mask)[0]
-    UB = np.amin([e(i) for i in UB_ids])
+        def e(i):
+            wx_i = 0
+            for svi in sv_indices:
+                wx_i += alphas[svi] * ys[svi] * np.dot(xs[:, svi], xs[:, i])
+            return ys[i] - wx_i
 
-    # anything between LB and UB would be correct
-    # lets just pick their mean
-    bias = (LB + UB) / 2
+        LB_mask = np.logical_or(
+            np.logical_and(not_sv_mask, ys == 1),
+            np.logical_and(sv_mask, ys == -1))
+        LB_ids = np.nonzero(LB_mask)[0]
+        LB = np.amax([e(i) for i in LB_ids])
+
+        UB_mask = np.logical_or(
+            np.logical_and(sv_mask, ys == 1),
+            np.logical_and(not_sv_mask, ys == -1))
+        UB_ids = np.nonzero(UB_mask)[0]
+        UB = np.amin([e(i) for i in UB_ids])
+
+        # anything between LB and UB would be correct
+        # lets just pick their mean
+        bias = (LB + UB) / 2
+
     return bias
 
 
