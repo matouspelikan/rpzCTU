@@ -243,6 +243,7 @@ def compute_bias(K, ys, alphas, C):
     """
     N = ys.size
     eps = 1e-10
+    alpha_y = np.reshape(alphas * ys, (len(alphas), 1))
 
     # check if there are support vectors exactly on the margin
     on_margin_mask = np.logical_and(alphas > eps, alphas < C)
@@ -250,38 +251,45 @@ def compute_bias(K, ys, alphas, C):
         # there are some! lets do the obvious bias computation
         ids = np.nonzero(on_margin_mask)[0]
 
-        bias = 0
-        for svi in ids:
-            s = 0
-            for i in range(N):
-                s += alphas[i] * ys[i] * K[i, svi]
+        bias = np.mean(ys[ids] - np.sum(alpha_y * K[:, ids],
+                                        axis=0))
 
-            bias += ys[svi] - s
-        bias /= len(ids)
+        ## Vectorized version of:
+        # slow_bias = 0
+        # for svi in ids:
+        #     s = 0
+        #     for i in range(N):
+        #         s += alphas[i] * ys[i] * K[i, svi]
+
+        #     slow_bias += ys[svi] - s
+        # slow_bias /= len(ids)
+        # assert np.isclose(bias, slow_bias)
     else:
         # no support vectors exactly on the margin
         sv_mask = alphas > eps
         not_sv_mask = np.logical_not(sv_mask)
 
         sv_indices = np.nonzero(sv_mask)[0]
+        e_i = ys - np.sum(alpha_y * K, axis=0)
 
-        def e(i):
-            wx_i = 0
-            for svi in sv_indices:
-                wx_i += alphas[svi] * ys[svi] * K[i, svi]
-            return ys[i] - wx_i
+        ## Vectorized version of:
+        # def e(i):
+        #     wx_i = 0
+        #     for svi in sv_indices:
+        #         wx_i += alphas[svi] * ys[svi] * K[i, svi]
+        #     return ys[i] - wx_i
+        # slow_e_i = np.array([e(i) for i in range(len(alphas))])
+        # assert np.allclose(e_i, slow_e_i)
 
         LB_mask = np.logical_or(
             np.logical_and(not_sv_mask, ys == 1),
             np.logical_and(sv_mask, ys == -1))
-        LB_ids = np.nonzero(LB_mask)[0]
-        LB = np.amax([e(i) for i in LB_ids])
+        LB = np.amax(e_i[LB_mask])
 
         UB_mask = np.logical_or(
             np.logical_and(sv_mask, ys == 1),
             np.logical_and(not_sv_mask, ys == -1))
-        UB_ids = np.nonzero(UB_mask)[0]
-        UB = np.amin([e(i) for i in UB_ids])
+        UB = np.amin(e_i[UB_mask])
 
         # anything between LB and UB would be correct
         # lets just pick their mean
