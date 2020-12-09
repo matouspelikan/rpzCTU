@@ -8,7 +8,6 @@ import itertools
 
 def k_means(x, k, max_iter, show=False, init_means=None):
     """
-<<<<<<< Updated upstream
     Implementation of the k-means clustering algorithm.
 
     :param x:               feature vectors, np array (dim, number_of_vectors)
@@ -24,26 +23,6 @@ def k_means(x, k, max_iter, show=False, init_means=None):
                             i.e. centroids[:,i] is the center of the i-th cluster.
     :return sq_dists:       squared distances to the nearest centroid for each feature vector,
                             np array (number_of_vectors, )
-=======
-    cluster_labels, centroids, sq_dists = k_means(x, k, max_iter, show, init_means)
-
-    Implementation of the k-centroids clustering algorithm.
-
-    :param x:               feature vectors, np array (dim, number_of_vectors) (float64/double),
-                            where dim is arbitrary feature vector dimension
-    :param k:               required number of clusters, scalar (int32)
-    :param max_iter:        stopping criterion: max. number of iterations (scalar, int32);
-                            set it to infinity (np.inf) if you wish to deactivate this criterion
-    :param show:            boolean switch to turn on/off visualization of partial results, optional, bool [default=False]
-    :param init_means:      initial cluster prototypes, optional, np array (dim, k) (float64/double) [default=None]
-    :return cluster_labels: cluster index for each feature vector, np array (number_of_vectors, ),
-                            array contains only values from 1 to k,
-                            i.e. cluster_labels[i] is the index of a cluster which the vector x[:,i] belongs to.
-    :return centroids:      cluster centers, np array (dim, k) (float64/double),
-                            i.e. centroids[:,i] is the center of the i-th cluster.
-    :return sq_dists:       squared distances to the nearest mean for each feature vector,
-                            np array (number_of_vectors, ) (float64/double)
->>>>>>> Stashed changes
 
     Note 1: The iterative procedure terminates if either maximum number of iterations is reached
             or there is no change in assignment of data to the clusters.
@@ -84,7 +63,6 @@ def k_means_multiple_trials(x, k, n_trials, max_iter, show=False):
     avoid local minima. Result of the trial with the lowest "within-cluster
     sum of squares" is selected as the best one and returned.
 
-<<<<<<< Updated upstream
     :param x:               feature vectors, np array (dim, number_of_vectors)
     :param k:               required number of clusters, scalar
     :param n_trials:        number of trials, scalars
@@ -98,23 +76,6 @@ def k_means_multiple_trials(x, k, n_trials, max_iter, show=False):
                             i.e. centroids[:,i] is the center of the i-th cluster.
     :return sq_dists:       squared distances to the nearest centroid for each feature vector,
                             np array (number_of_vectors, )
-=======
-    :param x:               feature vectors, np array (dim, number_of_vectors) (float64/double),
-                            where dim is arbitrary feature vector dimension
-    :param k:               required number of clusters, scalar (int32)
-    :param n_trials:        number of trials, scalars
-    :param max_iter:        stopping criterion: max. number of iterations (scalar, int32);
-                            set it to infinity (np.inf) if you wish to deactivate this criterion
-    :param show:            boolean switch to turn on/off visualization of partial results, optional, bool [default=False]
-    :param init_means:      initial cluster prototypes, optional, np array (dim, k) (float64/double) [default=None]
-    :return cluster_labels: cluster index for each feature vector, np array (number_of_vectors, ),
-                            array contains only values from 1 to k,
-                            i.e. cluster_labels[i] is the index of a cluster which the vector x[:,i] belongs to.
-    :return centroids:      cluster centers, np array (dim, k) (float64/double),
-                            i.e. centroids[:,i] is the center of the i-th cluster.
-    :return sq_dists:       squared distances to the nearest mean for each feature vector,
-                            np array (number_of_vectors, ) (float64/double)
->>>>>>> Stashed changes
     """
     raise NotImplementedError("You have to implement this function.")
     cluster_labels, centroids, sq_dists = None, None, None
@@ -125,11 +86,7 @@ def random_sample(weights):
     """
     picks randomly a sample based on the sample weights.
 
-<<<<<<< Updated upstream
     :param weights: array of sample weights, np array (n, )
-=======
-    :param weights: array of sample weights, np array (n, ) (float64/double)
->>>>>>> Stashed changes
     :return idx:    index of chosen sample, scalar
 
     Note: use np.random.uniform() for random number generation in open interval (0, 1)
@@ -142,19 +99,11 @@ def random_sample(weights):
 def k_meanspp(x, k):
     """
     performs k-means++ initialization for k-means clustering.
-<<<<<<< Updated upstream
 
     :param x:           Feature vectors, np array (dim, number_of_vectors)
     :param k:           Required number of clusters, scalar
 
     :return centroids:  proposed centroids for k-means initialization, np array (dim, k)
-=======
-
-    :param x:           Feature vectors, np array (dim, number_of_vectors) (float64/double),
-                        where dim is arbitrary feature vector dimension
-    :param k:           Required number of clusters, scalar
-    :return centroids:  k proposed centroids for k-means initialization, np array (dim, k)
->>>>>>> Stashed changes
     """
     raise NotImplementedError("You have to implement this function.")
     centroids = None
@@ -163,7 +112,6 @@ def k_meanspp(x, k):
 
 def quantize_colors(im, k):
     """
-<<<<<<< Updated upstream
     Image color quantization using the k-means clustering. A subset of 1000 pixels
     is first clustered into k clusters based on their RGB color.
     Quantized image is constructed by replacing each pixel color by its cluster centroid.
@@ -173,15 +121,6 @@ def quantize_colors(im, k):
     :return im_q:       image with quantized colors, np array (h, w, 3) (uint8)
     
     note: make sure that the k-means is run on floating point inputs.
-=======
-    Image color quantization using the k-means clustering. The pixel colors
-    are at first clustered into k clusters. Color of each pixel is then set
-    to the mean color of the cluster to which it belongs to.
-
-    :param im:      image whose pixel colors are to be quantized, np array (h, w, 3) (np.uint8 within 0-255)
-    :param k:       required number of quantized colors, scalar (int32)
-    :return im_q:   image with quantized colors, np array (h, w, 3) (uint8 within 0-255)
->>>>>>> Stashed changes
     """
     raise NotImplementedError("You have to implement this function.")
     im_q = None
