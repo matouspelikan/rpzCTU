@@ -1,5 +1,1 @@
 question1 : [a, b, c, d, e]
-question2 : [10000, 25]
-question3 : [0.5]
-question4 : [1000, 1.8]
-question5 : [0.5]
