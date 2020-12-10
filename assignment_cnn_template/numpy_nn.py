@@ -7,7 +7,7 @@ class Layer:
     def forward(self, x):
         raise NotImplementedError()
 
-    def backward(self, grad_output):
+    def backward(self, dL_wrt_output):
         raise NotImplementedError()
 
     def params(self):
