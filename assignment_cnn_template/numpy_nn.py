@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import copy
 
 # layer interface - do not modify
 class Layer:
@@ -343,7 +344,7 @@ if __name__ == '__main__':
             # remember the best model so far
             if len(val_losses) == 0 or val_losses[-1] < val_losses[best_val_loss_epoch]:
                 best_val_loss_epoch = epoch
-                model_best_params = [layer.params() for layer in model]
+                model_best_params = [copy.deepcopy(layer.params()) for layer in model]
 
             trn_losses.append(cumulative_epoch_trn_loss / batch_count)
             if epoch % print_each == 0:
