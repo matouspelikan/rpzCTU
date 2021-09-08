@@ -48,22 +48,19 @@ def classify_discrete(imgs, q):
     return labels
 
 
-def worst_risk_cont(distribution_A, distribution_B, distribution_A_priors):
+def worst_risk_cont(distribution_A, distribution_B, true_A_prior):
     """
-    For each given prior probability value of the first class, the function finds the optimal bayesian strategy and computes its worst possible risk in case it is run with data from different a priori probability. It assumes the 0-1 loss.
+    Find the optimal bayesian strategy for true_A_prior (assuming 0-1 loss) and compute its worst possible risk in case the priors are different.
 
     :param distribution_A:          parameters of the normal dist.
                                     distribution_A['Mean'], distribution_A['Sigma'] - python floats
     :param distribution_B:          the same as distribution_A
-    :param distribution_A_priors:   priors (n, ) np.array
-    :return worst_risk:             worst bayesian risk with varying priors (n, ) np array
-                                    for distribution_A, distribution_B with different priors
-
-    Hint: for all distribution_A_priors calculate bayesian strategy and corresponding maximal risk.
+    :param true_A_prior:            true A prior probability - python float
+    :return worst_risk:             worst possible bayesian risk when evaluated with different prior
     """
     raise NotImplementedError("You have to implement this function.")
-    worst_risks = None
-    return worst_risks
+    worst_risk = 42
+    return worst_risk
 
 
 def minimax_strategy_cont(distribution_A, distribution_B):
