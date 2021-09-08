@@ -64,11 +64,11 @@ def classify_discrete(measurements, q):
 
 def classification_error(predictions, labels):
     """
-    error = classification_error_discrete(predictions, labels)
+    error = classification_error(predictions, labels)
 
     :param predictions: (n, ) np.array of values 0 or 1 - predicted labels
     :param labels:      (n, ) np.array of values 0 or 1 - ground truth labels
-    :return:            error - classification error ~ a fraction of false predictions
+    :return:            error - classification error ~ a fraction of predictions being incorrect
                         python float in range <0, 1>
     """
     raise NotImplementedError("You have to implement this function.")
