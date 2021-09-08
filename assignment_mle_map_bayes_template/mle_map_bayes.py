@@ -126,16 +126,16 @@ def bayes_estim_categorical(counts, alphas):
     return pk
 
 # Classification
-def mle_Bayes_classif(test_imgs, train_data_A, train_data_C):
+def mle_Bayes_classif(x_test, x_train_A, x_train_C):
     """
     Classify images using Bayes classification using MLE of normal distributions and 0-1 loss.
 
-    :param test_imgs:      images to be classified, numpy array (H, W, N)
-    :param train_data_A:   training image features A, numpy array (nA, )
-    :param train_data_C:   training image features C, numpy array (nC, )
+    :param x_test:         test image features, numpy array (N, )
+    :param x_train_A:      training image features A, numpy array (nA, )
+    :param x_train_C:      training image features C, numpy array (nC, )
 
     :return:               q - classification strategy (see find_strategy_2normal)
-    :return:               labels - classification of test_imgs, numpy array (N, ) (see bayes.classify_2normal)
+    :return:               labels - classification of test_data, numpy array (N, ) (see bayes.classify_2normal)
     :return:               DA - parameters of the normal distribution of A
                             DA['Mean'] - python float
                             DA['Sigma'] - python float
@@ -150,15 +150,15 @@ def mle_Bayes_classif(test_imgs, train_data_A, train_data_C):
     return q, labels, DA, DC
 
 
-def map_Bayes_classif(test_imgs, train_data_A, train_data_C,
+def map_Bayes_classif(x_test, x_train_A, x_train_C,
                       mu0_A, nu_A, alpha_A, beta_A,
                       mu0_C, nu_C, alpha_C, beta_C):
     """
     Classify images using Bayes classification using MAP estimate of normal distributions with NIG priors and 0-1 loss.
 
-    :param test_imgs:      images to be classified, numpy array (H, W, N)
-    :param train_data_A:   training image features A, numpy array (nA, )
-    :param train_data_C:   training image features C, numpy array (nC, )
+    :param x_test:         test image features, numpy array (N, )
+    :param x_train_A:      training image features A, numpy array (nA, )
+    :param x_train_C:      training image features C, numpy array (nC, )
 
     :param mu0_A:          prior NIG parameter for A - python float
     :param nu_A:           prior NIG parameter for A - python float
@@ -243,35 +243,31 @@ def find_strategy_2normal(distribution_A, distribution_B):
     return q
 
 
-def classify_2normal(imgs, q):
+def classify_2normal(measurements, q):
     """
-    label = classify_2normal(imgs, q)
+    label = classify_2normal(measurements, q)
 
-    Classify images using continuous measurement and strategy q.
+    Classify images using continuous measurements and strategy q.
 
-    :param imgs:    test set images, np.array (h, w, n)
+    :param imgs:    test set measurements, np.array (n, )
     :param q:       strategy
                     q['t1'] q['t2'] - float decision thresholds
                     q['decision'] - (3, ) int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:        label - image labels, (n, ) int32
+    :return:        label - classification labels, (n, ) int32
     """
     raise NotImplementedError("You have to implement this function.")
     label = None
     return label
 
 
-def classification_error_2normal(images, labels, q):
+def classification_error(predictions, labels):
     """
-    error = classification_error_2normal(images, labels, q)
+    error = classification_error(predictions, labels)
 
-    Compute classification error of a strategy q in a test set.
-
-    :param images:  test set images, (h, w, n)
-    :param labels:  test set labels (n, )
-    :param q:       strategy
-                    q['t1'] q['t2'] - float decision thresholds
-                    q['decision'] - (3, ) np.int32 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:        python float classification error in range <0, 1>. Fraction of incorrect classifications.
+    :param predictions: (n, ) np.array of values 0 or 1 - predicted labels
+    :param labels:      (n, ) np.array of values 0 or 1 - ground truth labels
+    :return:            error - classification error ~ a fraction of predictions being incorrect
+                        python float in range <0, 1>
     """
     raise NotImplementedError("You have to implement this function.")
     error = None
