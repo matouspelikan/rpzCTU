@@ -107,17 +107,13 @@ def risk_fix_q_cont(distribution_A, distribution_B, distribution_A_priors, q):
 #####                                                                      #####
 ################################################################################
 
-
-def classification_error_discrete(images, labels, q):
+def classification_error(predictions, labels):
     """
-    error = classification_error_discrete(images, labels, q)
+    error = classification_error(predictions, labels)
 
-    Compute classification error for a discrete strategy q.
-
-    :param images:      images, (h, w, n) np.uint8 np.array
+    :param predictions: (n, ) np.array of values 0 or 1 - predicted labels
     :param labels:      (n, ) np.array of values 0 or 1 - ground truth labels
-    :param q:           (m, m) np.array of 0 or 1 - classification strategy
-    :return:            error - classification error as a fraction of false samples
+    :return:            error - classification error ~ a fraction of predictions being incorrect
                         python float in range <0, 1>
     """
     raise NotImplementedError("You have to implement this function.")
@@ -166,39 +162,21 @@ def bayes_risk_2normal(distribution_A, distribution_B, q):
     return R
 
 
-def classify_2normal(imgs, q):
+def classify_2normal(measurements, q):
     """
-    label = classify_2normal(imgs, q)
+    label = classify_2normal(measurements, q)
 
-    Classify images using continuous measurement and strategy q.
+    Classify images using continuous measurements and strategy q.
 
-    :param imgs:    test set images, np.array (h, w, n)
+    :param imgs:    test set measurements, np.array (n, )
     :param q:       strategy
                     q['t1'] q['t2'] - float decision thresholds
                     q['decision'] - (3, ) int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:        label - image labels, (n, ) int32
+    :return:        label - classification labels, (n, ) int32
     """
     raise NotImplementedError("You have to implement this function.")
     label = None
     return label
-
-
-def classification_error_2normal(images, labels, q):
-    """
-    error = classification_error_2normal(images, labels, q)
-
-    Compute classification error of a strategy q in a test set.
-
-    :param images:  test set images, (h, w, n)
-    :param labels:  test set labels (n, )
-    :param q:       strategy
-                    q['t1'] q['t2'] - float decision thresholds
-                    q['decision'] - (3, ) np.int32 decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
-    :return:        python float classification error in range <0, 1>. Fraction of incorrect classifications.
-    """
-    raise NotImplementedError("You have to implement this function.")
-    error = None
-    return error
 
 
 ################################################################################
