@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -164,7 +167,87 @@ class SE(Loss):
         dL_wrt_x = None
         return dL_wrt_x
 
-##### Visualization.  You do not have to modify this.
+
+################################################################################
+#####                                                                      #####
+#####                            Visualization                             #####
+#####                                                                      #####
+#####             Below this line are already prepared methods             #####
+#####                                                                      #####
+#####                    You do not have to modify this                    #####
+#####                                                                      #####
+################################################################################
+
+def visualize_data(data, legend=None, title=None, xlabel=None, ylabel=None, save_filepath=None, show=True):
+    """
+    visualize_data(data, legend, title, xlabel, ylabel, save_filepath, show)
+
+    :param data:            list of 1D input data
+    :param legend:          list of data labels (same size as data, optional)
+    :param title:           figure title, string (optional)
+    :param xlabel:          x-axis label, string (optional)
+    :param ylabel:          y-axis label, string (optional)
+    :param save_filepath:   name and path for saving (optional)
+    :param show:            showing figure, boolean
+    :return:
+    """
+
+    if title:
+        plt.title(title)
+    for d in data:
+        plt.plot(np.arange(len(d)), d)
+    if xlabel:
+        plt.xlabel(xlabel)
+    if ylabel:
+        plt.ylabel(ylabel)
+    if legend:
+        plt.legend(legend)
+    if save_filepath:
+        plt.savefig(save_filepath)
+    if show:
+        plt.show()
+
+
+def visualize_xy(data, legend=None, title=None, xlabel=None, ylabel=None, save_filepath=None, show=True, **kwargs):
+    """
+    visualize_data(data, legend, title, xlabel, ylabel, save_filepath, show)
+
+    :param data:            list of 2D input data tuples
+                            i.e.: data = [(xdata, ydata)]
+    :param legend:          list of data labels (same size as data, optional)
+    :param title:           figure title, string (optional)
+    :param xlabel:          x-axis label, string (optional)
+    :param ylabel:          y-axis label, string (optional)
+    :param save_filepath:   name and path for saving (optional)
+    :param show:            showing figure, boolean
+    :return:
+    """
+    axis = kwargs.get('axis', None)
+    grid = kwargs.get('grid', None)
+    linestyle = kwargs.get('linestyle', '-')
+
+    if title:
+        plt.title(title)
+    for d in data:
+        plt.plot(d[0], d[1], linestyle)
+    if xlabel:
+        plt.xlabel(xlabel)
+    if ylabel:
+        plt.ylabel(ylabel)
+    if legend:
+        plt.legend(legend)
+
+    if axis:
+        plt.axis(axis)
+    if grid:
+        plt.grid()
+
+    if save_filepath:
+        plt.savefig(save_filepath)
+    if show:
+        plt.show()
+
+
 def show_classification(test_images, labels, letters):
     """
     show_classification(test_images, labels, letters)
@@ -241,7 +324,15 @@ def load_data(path, class_a, class_b):
         X_tst = (X_tst - trn_mean) / trn_std
         return (X_trn, y_trn), (X_tst, y_tst)
 
-# AE related stuff.  Do not touch
+
+################################################################################
+#####                                                                      #####
+#####                           AE related stuff                           #####
+#####                                                                      #####
+#####                          Do NOT motify this                          #####
+#####                                                                      #####
+################################################################################
+
 def get_relu_class(*_):
     return [ReLU]
 
@@ -255,13 +346,27 @@ def get_se_loss_class(*_):
     return [SE]
 
 
-if __name__ == '__main__':
+################################################################################
+#####                                                                      #####
+#####             Below this line you may insert debugging code            #####
+#####                                                                      #####
+#####                  Already prepared -- You can modify                  #####
+#####                                                                      #####
+################################################################################
+
+def main():
+    """
+    # Code for training network and printing its results only.
+    # Rest of the code is prepared in the jupyter notebook.
+    """
+
     # set hyperparameters
-    raise NotImplementedError("You have to set hyperparameters yourself.")
+    raise NotImplementedError("You have to set hyperparameters yourself (play with them)")
     learning_rate = None
     batch_size = None
     N_epochs = 90
     validation_set_fraction = 0.5
+
     print_each = 30
 
     # load data - set which two MNIST digits you want to classify
@@ -356,13 +461,8 @@ if __name__ == '__main__':
 
 
     # Plot epochs
-    plt.plot(np.arange(len(val_losses)), val_losses)
-    plt.plot(np.arange(len(trn_losses)), trn_losses)
-    plt.xlabel('epoch')
-    plt.ylabel('MSE')
-    plt.legend(['validation', 'training'])
-    plt.savefig('numpy_nn_training.png')
-    plt.show()
+    visualize_data([val_losses, trn_losses], legend=['validation', 'training'],
+                   xlabel='epoch', ylabel='MSE', save_filepath='numpy_nn_training.png')
 
     # TST load best model
     print('Best VAL model loss {:.4f} at epoch #{:d}.'.format(val_losses[best_val_loss_epoch], best_val_loss_epoch))
@@ -374,7 +474,7 @@ if __name__ == '__main__':
     activation = X_tst
     for layer in model:
         activation = layer.forward(activation)
-    y_hat = (activation > 0.5).astype(np.int)
+    y_hat = (activation > 0.5).astype(int)
 
     loss = trn_head.forward(activation, y_tst)
     print("[TST] MSE loss {:.4f}".format(loss.mean()))
@@ -388,3 +488,7 @@ if __name__ == '__main__':
                                                                                                   class_b))
     plt.savefig('numpy_nn_classification.png')
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

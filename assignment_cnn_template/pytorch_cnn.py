@@ -39,6 +39,9 @@ class SimpleCNN(nn.Module):
 
 
 class MyNet(nn.Module):
+    """
+    Experiment with all possible settings mentioned in the CW page
+    """
     def __init__(self):
         super(MyNet, self).__init__()
 
