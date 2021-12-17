@@ -30,7 +30,7 @@ class Loss:
 
 class Linear(Layer):
     """
-    Implements the fully-connected layer with bias, f(x) = Wx + b.
+    Implements the fully-connected layer with bias, f(x) = x*W + b.
     ("Linear" is another name for "FullyConnected", at least in PyTorch)
     """
 
