@@ -92,6 +92,42 @@ def find_strategy_2normal(distribution_A, distribution_B):
                                If there is only one threshold, q['t1'] should be equal to q['t2'] and the middle decision should be 0
                                If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same (0 preferred)
     """
+
+    s_A = distribution_A['Sigma']
+    m_A = distribution_A['Mean']
+    p_A = distribution_A['Prior']
+    s_B = distribution_B['Sigma']
+    m_B = distribution_B['Mean']
+    p_B = distribution_B['Prior']
+
+    q = {}
+
+    # extreme priors
+    eps = 1e-10
+    if p_A < eps:
+        pass
+    elif p_B < eps:
+        pass
+    else:
+        pass
+        if a == 0:
+            # same sigmas -> not quadratic
+            if b == 0:
+                # same sigmas and same means -> not even linear
+                pass
+            else:
+                # same sigmas, different means -> linear equation
+                pass
+        else:
+            # quadratic equation
+            pass
+            if D > 0:
+                pass
+            elif D == 0:
+                pass
+            elif D < 0:
+                pass
+
     raise NotImplementedError("You have to implement this function.")
     q = None
 
@@ -314,3 +350,17 @@ def montage(images, colormap='gray'):
     plt.imshow(im_matrix, cmap=colormap)
     plt.axis('off')
     return im_matrix
+
+
+################################################################################
+#####                                                                      #####
+#####             Below this line you may insert debugging code            #####
+#####                                                                      #####
+################################################################################
+
+def main():
+    # HERE IT IS POSSIBLE TO ADD YOUR TESTING OR DEBUGGING CODE
+    pass
+
+if __name__ == "__main__":
+    main()
