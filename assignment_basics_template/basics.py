@@ -47,46 +47,95 @@ def compute_letter_mean(letter_char, alphabet, images, labels):
     return letter_mean
 
 
-def compute_lr_histogram(letter_char, alphabet, images, labels, num_bins, return_bin_edges=False):
+def compute_lr_features(letter_char, alphabet, images, labels):
     """
-    lr_histogram = compute_lr_histogram(letter_char, alphabet, images, labels, num_bins)
+    lr_features = compute_lr_features(letter_char, alphabet, images, labels)
 
-    Calculates feature histogram.
+    Calculates LR features for all letters.
 
     :param letter_char:                is a character representing the letter whose feature histogram
                                        we want to compute, e.g. 'C'
     :param alphabet:                   np.array of all characters present in images (n_letters, )
     :param images:                     images of letters, np.array of shape (h, w, n_images)
     :param labels:                     image_labels, np.array of size (n_images, ) (indexes into alphabet array)
-    :param num_bins:                   number of histogram bins
-    :param return_bin_edges:
-    :return:                           counts of values in the corresponding bins, np.array (num_bins, ),
-                                       (only if return_bin_edges is True) histogram bin edges, np.array (num_bins+1, )
+    :return:                           features for all occurrences of specific :param letter_char:, np.array of shape (n_letter_occurrences, )
     """
 
     raise NotImplementedError("You have to implement this function.")
-    if return_bin_edges:
-        return lr_histogram, bin_edges
-    else:
-        return lr_histogram
+    return lr_features
 
-
-def histogram_plot(hist_data, color, alpha):
-    """
-    Plot histogram from outputs of compute_lr_histogram
-
-    :param hist_data: tuple of (histogram values, histogram bin edges)
-    :param color:     color of the histogram (passed to matplotlib)
-    :param alpha:     transparency alpha of the histogram (passed to matplotlib)
-    """
-
-    raise NotImplementedError("You have to implement this function.")
 
 ################################################################################
 #####                                                                      #####
 #####             Below this line are already prepared methods             #####
 #####                                                                      #####
 ################################################################################
+
+
+def plot_letter_feature_histogram(features_1, features_2, letters, n_bins=20):
+    """
+    Plot histograms from two sets of precomputed features
+    :param features_1: features for all occurrences of specific letter 1, np.array of shape (n_letter_1, )
+    :param features_2: features for all occurrences of specific letter 2, np.array of shape (n_letter_2, )
+    :param letters:    are a characters representing letters which feature histogram we want to compute, e.g. 'CZ', string of the length = 2
+    :param n_bins:     number of histogram bins, integer
+    :return:
+    """
+    plt.figure()
+    plt.title("letter feature histogram")
+    plt.xlabel("LR feature")
+    plt.ylabel("# Images")
+    plt.hist(features_1, bins=n_bins, histtype='bar', edgecolor='black', linewidth=1.1, alpha=1., label=f'letter {letters[0]}')
+    plt.hist(features_2, bins=n_bins, histtype='bar', edgecolor='black', linewidth=1.1, alpha=0.5, label=f'letter {letters[1]}')
+    plt.legend()
+
+def plot_letter_feature_histogram_interactive(alphabet, images, labels, n_bins=(2, 40)):
+    """
+    Interactive version of plot_letter_feature_histogram()
+
+    You have to have installed ipywidgets to run interactive methods.
+
+    :param alphabet: np.array of all characters present in images (n_letters, )
+    :param images:   images of letters, np.array of shape (h, w, n_images)
+    :param labels:   image_labels, np.array of size (n_images, ) (indexes into alphabet array)
+    :param n_bins:   number of histogram bins, integer
+    :return:
+    """
+    try:
+        from ipywidgets import interact, interactive, fixed
+
+        @interact(letterA=alphabet, letterB=alphabet, n_bins=n_bins)
+        def plot_interactive_letter_feature_histogram(letterA='R', letterB='A', n_bins=20):
+            features_1 = compute_lr_features(str(letterA), alphabet, images, labels)
+            features_2 = compute_lr_features(str(letterB), alphabet, images, labels)
+            plot_letter_feature_histogram(features_1, features_2, letterA + letterB, n_bins=n_bins)
+
+    except ImportError:
+        print('Optional feature.')
+
+def plot_letter_mean_interactive(alphabet, images, labels):
+    """
+    Interactive version of compute_letter_mean()
+
+    You have to have installed ipywidgets to run interactive methods.
+
+    :param alphabet: np.array of all characters present in images (n_letters, )
+    :param images:   images of letters, np.array of shape (h, w, n_images)
+    :param labels:   image_labels, np.array of size (n_images, ) (indexes into alphabet array)
+    :return:
+    """
+    try:
+        from ipywidgets import interact, interactive, fixed
+
+        @interact(letter=alphabet)
+        def plot_interactive_letter_mean(letter='R'):
+            initial_mean_interactive = compute_letter_mean(str(letter), alphabet, images, labels)
+            plt.title("{} mean".format(letter))
+            plt.imshow(initial_mean_interactive, cmap='gray');
+
+    except ImportError:
+        print('Optional feature.')
+
 
 def montage(images, colormap='gray'):
     """
@@ -111,3 +160,16 @@ def montage(images, colormap='gray'):
     plt.imshow(im_matrix, cmap=colormap)
     plt.axis('off')
     return im_matrix
+
+################################################################################
+#####                                                                      #####
+#####             Below this line you may insert debugging code            #####
+#####                                                                      #####
+################################################################################
+
+def main():
+    # HERE IT IS POSSIBLE TO ADD YOUR TESTING OR DEBUGGING CODE
+    pass
+
+if __name__ == "__main__":
+    main()
