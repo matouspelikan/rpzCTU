@@ -85,8 +85,9 @@ def plot_letter_feature_histogram(features_1, features_2, letters, n_bins=20):
     plt.title("letter feature histogram")
     plt.xlabel("LR feature")
     plt.ylabel("# Images")
-    plt.hist(features_1, bins=n_bins, histtype='bar', edgecolor='black', linewidth=1.1, alpha=1., label=f'letter {letters[0]}')
-    plt.hist(features_2, bins=n_bins, histtype='bar', edgecolor='black', linewidth=1.1, alpha=0.5, label=f'letter {letters[1]}')
+    hist_data, edge_data = np.histogram([features_1, features_2], bins=n_bins)
+    plt.hist(features_1, bins=edge_data, histtype='bar', edgecolor='black', linewidth=1.1, alpha=1., label=f'letter {letters[0]}')
+    plt.hist(features_2, bins=edge_data, histtype='bar', edgecolor='black', linewidth=1.1, alpha=0.5, label=f'letter {letters[1]}')
     plt.legend()
 
 def plot_letter_feature_histogram_interactive(alphabet, images, labels, n_bins=(2, 40)):
