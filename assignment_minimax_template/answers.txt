@@ -1,5 +1,0 @@
-# fill correct answers
-question1 : 0.23
-question2 : [a, b, c]
-question3 : [a]
-

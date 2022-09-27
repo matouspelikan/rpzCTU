@@ -1,4 +1,0 @@
-question1 : [a, b, c]
-question2 : [a, b, c]
-question3 : [a, b, c]
-question4 : [a, b, c]

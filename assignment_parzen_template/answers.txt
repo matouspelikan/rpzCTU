@@ -1,3 +1,0 @@
-question1 : [?]
-question2 : [1.12, 2.12]
-question3 : [1.12]
