@@ -90,7 +90,8 @@ def find_strategy_2normal(distribution_A, distribution_B):
                                q['t1'], q['t2'] - decision thresholds - python floats
                                q['decision'] - (3, ) np.int32 np.array decisions for intervals (-inf, t1>, (t1, t2>, (t2, inf)
                                If there is only one threshold, q['t1'] should be equal to q['t2'] and the middle decision should be 0
-                               If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same (0 preferred)
+                               If there is no threshold, q['t1'] and q['t2'] should be -/+ infinity and all the decision values should be the same
+                                (0 preferred if both strategies would have the same risk)
     """
 
     s_A = distribution_A['Sigma']
