@@ -19,7 +19,7 @@ class TestMinimaxCont(unittest.TestCase):
         np.testing.assert_almost_equal(q['t1'], -230.44601288127865, decimal=4)
         np.testing.assert_almost_equal(q['t2'], 3705.0796592073866, decimal=4)
         np.testing.assert_equal(q['decision'], np.array([1, 0, 1], dtype=np.int32))
-        np.testing.assert_almost_equal(risk, 0.2774251103401184)
+        np.testing.assert_almost_equal(risk, 0.2774251103401184, decimal=4)
 
     def test_classification_error(self):
         letters = 'MD'
