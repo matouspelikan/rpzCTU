@@ -153,8 +153,8 @@ def plot_aposteriori(X, y, w):
     thr = get_threshold(w)
 
     plt.figure()
-    plt.plot(plot_range, pAx, 'b-', LineWidth=2)
-    plt.plot(plot_range, pCx, 'r-', LineWidth=2)
+    plt.plot(plot_range, pAx, 'b-', linewidth=2)
+    plt.plot(plot_range, pCx, 'r-', linewidth=2)
     plt.plot(xA, np.zeros_like(xA), 'b+')
     plt.plot(xC, np.ones_like(xC), 'r+')
     plt.plot([thr, thr], [0, 1], 'k-')
