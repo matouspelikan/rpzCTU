@@ -262,3 +262,17 @@ def show_mnist_classification(imgs, labels, imgs_shape=None):
 
     plt.figure(figsize=(20,10))
     show_classification(images, labels, '01')
+
+
+################################################################################
+#####                                                                      #####
+#####             Below this line you may insert debugging code            #####
+#####                                                                      #####
+################################################################################
+
+def main():
+    # HERE IT IS POSSIBLE TO ADD YOUR TESTING OR DEBUGGING CODE
+    pass
+
+if __name__ == "__main__":
+    main()
