@@ -15,8 +15,20 @@ def get_kernel(Xi, Xj, options):
     :return K:      array with kernel function values,  (m, n) np array
     """
 
-    raise NotImplementedError("You have to implement this function.")
+    # raise NotImplementedError("You have to implement this function.")
     K = None
+    if options['kernel'] == 'linear':
+        K = np.matmul(Xi.T, Xj)
+    elif options['kernel'] == 'polynomial':
+        K = np.array(np.power(np.matmul(Xi.T, Xj) + 1, options['d']*np.ones(Xj.shape[1])))
+    elif options['kernel'] == 'rbf':
+        K = np.zeros((Xi.shape[1], Xj.shape[1]))
+        for i in range(Xj.shape[1]):
+            for j in range(Xi.shape[1]):
+                # v = Xj[:, i] - Xi[:, j]
+                v = Xi[:, j] - Xj[:, i]
+                K[j, i] = np.exp(-(np.linalg.norm(v)**2)/(2*options['sigma']**2))
+                
     return K
 
 
@@ -44,8 +56,32 @@ def svm(X, y, C, options):
         - model['fun']      - function that should be used for classification, function reference
     """
 
-    raise NotImplementedError("You have to implement this function.")
-    model = None
+    # raise NotImplementedError("You have to implement this function.")
+    model = {}
+    
+    n = X.shape[1]
+
+    H = get_kernel(X, X, options)
+
+    f = -np.ones(n)
+    H_old = H
+    H = np.dot(y.reshape(y.shape[0], 1), y.reshape(1, y.shape[0])) * H
+
+
+    res = gsmo(H, f, y, b=0, lb=np.zeros(n), ub=C*np.ones(n), verb=options['verb'], t_max=options['t_max'])
+    # print(res)
+    x = res[0]
+    b = compute_bias(H_old, y, x, C)
+    
+    # model['sv'] = X.T[x>1e-10].T
+    model['sv'] = X[:, x>1e-10]
+    model['y'] = y[x>1e-10]
+    model['alpha'] = x[np.where(x>1e-10)]
+    model['options'] = options
+    model['b'] = b
+    model['fun'] = classif_svm
+    
+    
     return model
 
 
@@ -58,8 +94,35 @@ def classif_svm(X, model):
 
     :return classif: labels (-1, 1) for feature points in X, np array (n, )
     """
-    raise NotImplementedError("You have to implement this function.")
+    # raise NotImplementedError("You have to implement this function.")
     classif = None
+    
+    sv = model['sv']
+    y = model['y']
+    alpha = model['alpha']
+    
+    # H = get_kernel(X, X, model['options'])
+    # v = np.zeros(H.shape[0])
+    v = 0
+
+    
+    # print(sv.shape[0])
+    # print(get_kernel(sv[:, 0].reshape(sv.shape[0], 1), X[:, 0].reshape(sv.shape[0], 1), model['options'])[0][0])
+    
+    classif = np.zeros(X.shape[1])
+    
+    for j in range(X.shape[1]):
+        v = model['b']
+        for i in range(alpha.shape[0]):
+            # v += y[i]*alpha[i]*sv[:, i]
+            v += y[i]*alpha[i]*get_kernel(sv[:, i].reshape(sv.shape[0], 1), X[:, j].reshape(sv.shape[0], 1), model['options'])[0][0]
+        if v > 0:
+            classif[j] = 1
+        else:
+            classif[j] = -1
+            
+    
+    
     return classif
 
 
@@ -77,8 +140,31 @@ def svm_crossvalidation(itrn, itst, X, y, C, options):
     :return error:  mean crossvalidation test error
     """
 
-    raise NotImplementedError("You have to implement this function.")
+    # raise NotImplementedError("You have to implement this function.")
     error = None
+    print(len(itrn))
+    print(len(itst))
+    print(X.shape)
+    
+    for i in range(len(itrn)):
+        X_trn = X[:, itrn[i]]
+        y_trn = y[itrn[i]]
+        X_tst = X[:, itst[i]]
+        y_tst = y[itst[i]]
+        
+        model = svm(X_trn, y_trn, C, options)
+        classif = classif_svm(X_tst, model)
+        
+        print(classif.shape)
+        
+        break
+    
+    # indexes = np.array(itrn[0])
+    # print(indexes)
+    # print(X[:, itrn[0]].shape)
+    # print(len(itrn[0]))
+    # print(len(itst[0]))
+    
     return error
 
 
@@ -101,8 +187,25 @@ def compute_measurements_2d(data, normalization=None):
                                           computed from data if normalization parameter not provided
     """
 
-    raise NotImplementedError("You have to implement this function.")
-    X, y, normalization = None, None, None
+    # raise NotImplementedError("You have to implement this function.")
+    X, y = None, None
+    
+    A = compute_measurement_lr_cont(data['images'])
+    B = compute_measurement_ul_cont(data['images'])
+    
+    if normalization is None:
+        normalization = {}
+        normalization['a_mean'] = np.mean(A)
+        normalization['a_std'] = np.std(A)
+        normalization['b_mean'] = np.mean(B)
+        normalization['b_std'] = np.std(B)
+    
+    A = (A - normalization['a_mean'])/normalization['a_std']
+    B = (B - normalization['b_mean'])/normalization['b_std']
+
+    X = np.vstack((A, B))
+    y = data['labels']
+    
     return X, y, normalization
 
 
@@ -475,6 +578,46 @@ def plot_points(X, y, size=None):
 
     plt.scatter(pts_A[0, :], pts_A[1, :], s=size)
     plt.scatter(pts_B[0, :], pts_B[1, :], s=size)
+    
+def compute_measurement_lr_cont(imgs):
+    """
+    x = compute_measurement_lr_cont(imgs)
+
+    Compute measurement on images, subtract sum of right half from sum of
+    left half.
+
+    :param imgs:    set of images, (h, w, n) numpy array
+    :return x:      measurements, (n, ) numpy array
+    """
+    assert len(imgs.shape) == 3
+
+    width = imgs.shape[1]
+    sum_rows = np.sum(imgs, dtype=np.float64, axis=0)
+
+    x = np.sum(sum_rows[0:int(width / 2),:], axis=0) - np.sum(sum_rows[int(width / 2):,:], axis=0)
+
+    assert x.shape == (imgs.shape[2], )
+    return x
+
+def compute_measurement_ul_cont(imgs):
+    """
+    x = compute_measurement_lr_cont(imgs)
+
+    Compute measurement on images, subtract sum of right half from sum of
+    left half.
+
+    :param imgs:    set of images, (h, w, n) numpy array
+    :return x:      measurements, (n, ) numpy array
+    """
+    assert len(imgs.shape) == 3
+
+    width = imgs.shape[1]
+    sum_rows = np.sum(imgs, dtype=np.float64, axis=1)
+
+    x = np.sum(sum_rows[0:int(width / 2),:], axis=0) - np.sum(sum_rows[int(width / 2):,:], axis=0)
+
+    assert x.shape == (imgs.shape[2], )
+    return x
 
 
 ################################################################################
